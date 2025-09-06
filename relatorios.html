@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios - Barbearia MV</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/relatorios.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar para Desktop -->
+    <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-cut"></i>
+                    <span>Barbearia MV</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="dashboard.html" class="nav-link">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="agenda.html" class="nav-link">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Agendamentos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="clientes.html" class="nav-link">
+                            <i class="fas fa-users"></i>
+                            <span>Clientes</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="funcionarios.html" class="nav-link">
+                            <i class="fas fa-user-tie"></i>
+                            <span>Funcionários</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="vendas.html" class="nav-link">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Vendas</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="caixa.html" class="nav-link">
+                            <i class="fas fa-cash-register"></i>
+                            <span>Caixa</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="relatorios.html" class="nav-link">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Relatórios</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="menu.html" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Voltar ao Menu</span>
+                </a>
+            </div>
+    </aside>
+
+    <div class="container">
+        <!-- Conteúdo Principal -->
+        <div class="main-wrapper">
+            <div class="main-content">
+                <header class="header">
+            <div class="header-content">
+                <a href="menu.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <h1><i class="fas fa-chart-bar"></i> Relatórios</h1>
+            </div>
+        </div>
+
+        <!-- Filtros de Período -->
+        <div class="period-filters">
+            <div class="filter-header">
+                <h2>Período de Análise</h2>
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-period="daily">
+                    <i class="fas fa-calendar-day"></i>
+                    Diário
+                </button>
+                <button class="filter-btn" data-period="weekly">
+                    <i class="fas fa-calendar-week"></i>
+                    Semanal
+                </button>
+                <button class="filter-btn" data-period="monthly">
+                    <i class="fas fa-calendar-alt"></i>
+                    Mensal
+                </button>
+                <button class="filter-btn" data-period="yearly">
+                    <i class="fas fa-calendar"></i>
+                    Anual
+                </button>
+            </div>
+            <div class="year-selector">
+                <label for="year-select">
+                    <i class="fas fa-calendar-alt"></i>
+                    Ano:
+                </label>
+                <select id="year-select" class="year-select">
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                    <option value="2021">2021</option>
+                    <option value="2020">2020</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Cards de Métricas -->
+        <div class="metrics-section">
+            <div class="section-header">
+                <h2>Métricas Financeiras</h2>
+                <div class="period-display">
+                    <span id="current-period">Hoje - 15/01/2025</span>
+                </div>
+            </div>
+            
+            <div class="metrics-grid">
+                <!-- Receita Total -->
+                <div class="metric-card">
+                    <div class="card-icon revenue">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Receita Total</h3>
+                        <div class="metric-value" id="total-revenue">R$ 1.250,00</div>
+                        <div class="metric-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +12% vs período anterior
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cortes Realizados -->
+                <div class="metric-card">
+                    <div class="card-icon cuts">
+                        <i class="fas fa-cut"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Cortes Realizados</h3>
+                        <div class="metric-value" id="total-cuts">25</div>
+                        <div class="metric-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +8% vs período anterior
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comissão Paga -->
+                <div class="metric-card">
+                    <div class="card-icon commission">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Comissão Paga</h3>
+                        <div class="metric-value" id="total-commission">R$ 375,00</div>
+                        <div class="metric-change neutral">
+                            <i class="fas fa-minus"></i>
+                            0% vs período anterior
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lucro Líquido -->
+                <div class="metric-card">
+                    <div class="card-icon profit">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Lucro Líquido</h3>
+                        <div class="metric-value" id="net-profit">R$ 875,00</div>
+                        <div class="metric-change positive">
+                            <i class="fas fa-arrow-up"></i>
+                            +15% vs período anterior
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tipos de Pagamento -->
+        <div class="payment-section">
+            <div class="section-header">
+                <h2>Tipos de Pagamento</h2>
+            </div>
+            
+            <div class="payment-grid">
+                <!-- Dinheiro -->
+                <div class="payment-card">
+                    <div class="payment-icon cash">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <div class="payment-content">
+                        <h3>Dinheiro</h3>
+                        <div class="payment-value" id="cash-amount">R$ 450,00</div>
+                        <div class="payment-percentage" id="cash-percentage">36%</div>
+                        <div class="payment-transactions">
+                            <span id="cash-transactions">9 transações</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PIX -->
+                <div class="payment-card">
+                    <div class="payment-icon pix">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <div class="payment-content">
+                        <h3>PIX</h3>
+                        <div class="payment-value" id="pix-amount">R$ 550,00</div>
+                        <div class="payment-percentage" id="pix-percentage">44%</div>
+                        <div class="payment-transactions">
+                            <span id="pix-transactions">11 transações</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cartão -->
+                <div class="payment-card">
+                    <div class="payment-icon card">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="payment-content">
+                        <h3>Cartão</h3>
+                        <div class="payment-value" id="card-amount">R$ 250,00</div>
+                        <div class="payment-percentage" id="card-percentage">20%</div>
+                        <div class="payment-transactions">
+                            <span id="card-transactions">5 transações</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            </div>
+        </div> <!-- Fecha main-wrapper -->
+    </div>
+
+    <script src="js/theme.js"></script>
+    <script src="js/relatorios.js"></script>
+</body>
+</html>

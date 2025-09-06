@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- Fundo circular -->
+  <circle cx="16" cy="16" r="15" fill="#1a1a1a" stroke="#00CED1" stroke-width="1"/>
+  
+  <!-- Tesoura simplificada -->
+  <g transform="translate(16, 16) rotate(-30) translate(-16, -16) scale(0.16)">
+    <!-- Lâmina 1 -->
+    <path d="M70,60 L130,120" stroke="#f8f8f8" stroke-width="8" stroke-linecap="round"/>
+    <!-- Lâmina 2 -->
+    <path d="M70,120 L130,60" stroke="#f8f8f8" stroke-width="8" stroke-linecap="round"/>
+    
+    <!-- Cabo 1 -->
+    <path d="M70,60 L50,40" stroke="#00CED1" stroke-width="8" stroke-linecap="round"/>
+    <!-- Cabo 2 -->
+    <path d="M70,120 L50,140" stroke="#00CED1" stroke-width="8" stroke-linecap="round"/>
+    
+    <!-- Círculos nas pontas -->
+    <circle cx="70" cy="60" r="8" fill="#00CED1"/>
+    <circle cx="70" cy="120" r="8" fill="#00CED1"/>
+  </g>
+  
+  <!-- Texto MV -->
+  <text x="16" y="20" font-family="Arial, sans-serif" font-size="8" font-weight="bold" text-anchor="middle" fill="#f8f8f8">MV</text>
+</svg>

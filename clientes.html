@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clientes - Barbearia MV</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/clientes.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar para Desktop -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-cut"></i>
+                    <span>Barbearia MV</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="dashboard.html" class="nav-link">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="agenda.html" class="nav-link">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Agendamentos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="clientes.html" class="nav-link">
+                            <i class="fas fa-users"></i>
+                            <span>Clientes</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="funcionarios.html" class="nav-link">
+                            <i class="fas fa-user-tie"></i>
+                            <span>Funcionários</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="vendas.html" class="nav-link">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Vendas</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="caixa.html" class="nav-link">
+                            <i class="fas fa-cash-register"></i>
+                            <span>Caixa</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="relatorios.html" class="nav-link">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Relatórios</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="menu.html" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Voltar ao Menu</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <div class="main-wrapper">
+        <header class="header">
+            <div class="header-content">
+                <button class="back-btn" onclick="window.location.href='menu.html'">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="logo">
+                    <img src="assets/logo.svg" alt="Barbearia MV">
+                    <h1>Clientes</h1>
+                </div>
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <i class="fas fa-sun"></i>
+                </button>
+            </div>
+        </header>
+
+        <section class="clients-section">
+            <!-- Barra de pesquisa e ações -->
+            <div class="search-bar">
+                <div class="search-input-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Pesquisar cliente..." oninput="searchClients()">
+                </div>
+                <button class="add-client-btn" onclick="openAddClientModal()">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Novo Cliente</span>
+                </button>
+            </div>
+
+            <!-- Estatísticas -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-info">
+                        <span class="stat-number" id="totalClients">0</span>
+                        <span class="stat-label">Total de Clientes</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-calendar-check"></i>
+                    <div class="stat-info">
+                        <span class="stat-number" id="activePackages">0</span>
+                        <span class="stat-label">Pacotes Ativos</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-cut"></i>
+                    <div class="stat-info">
+                        <span class="stat-number" id="totalCuts">0</span>
+                        <span class="stat-label">Cortes Realizados</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de clientes -->
+            <div class="clients-grid" id="clientsGrid">
+                <!-- Clientes serão carregados dinamicamente -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal para adicionar/editar cliente -->
+    <div id="clientModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Novo Cliente</h3>
+                <button class="close-btn" onclick="closeModal('clientModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="clientForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="clientName">Nome Completo:</label>
+                            <input type="text" id="clientName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="clientPhone">Telefone:</label>
+                            <input type="tel" id="clientPhone" placeholder="(11) 99999-9999">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="clientEmail">E-mail:</label>
+                            <input type="email" id="clientEmail">
+                        </div>
+                        <div class="form-group">
+                            <label for="clientBirthdate">Data de Nascimento:</label>
+                            <input type="date" id="clientBirthdate">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="clientNotes">Observações:</label>
+                        <textarea id="clientNotes" rows="3" placeholder="Preferências, alergias, etc..."></textarea>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" onclick="closeModal('clientModal')">Cancelar</button>
+                        <button type="submit" class="btn-confirm" id="saveClientBtn">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para pacote mensal -->
+    <div id="packageModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Pacote Mensal</h3>
+                <button class="close-btn" onclick="closeModal('packageModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="packageForm">
+                    <div class="form-group">
+                        <label for="packageType">Tipo de Pacote:</label>
+                        <select id="packageType" required>
+                            <option value="">Selecione...</option>
+                            <option value="basic">Básico - 4 cortes (R$ 120,00)</option>
+                            <option value="premium">Premium - 6 cortes (R$ 150,00)</option>
+                            <option value="vip">VIP - 8 cortes (R$ 180,00)</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="packageStartDate">Data de Início:</label>
+                            <input type="date" id="packageStartDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="packagePrice">Valor (R$):</label>
+                            <input type="number" id="packagePrice" step="0.01" required>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-cancel" onclick="closeModal('packageModal')">Cancelar</button>
+                        <button type="submit" class="btn-confirm">Criar Pacote</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmação de exclusão -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content delete-modal">
+            <div class="modal-header">
+                <h3>Confirmar Exclusão</h3>
+                <button class="close-btn" onclick="closeModal('deleteModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="delete-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>Tem certeza que deseja excluir este cliente?</p>
+                    <p class="delete-client-name"></p>
+                    <small>Esta ação não pode ser desfeita.</small>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('deleteModal')">Cancelar</button>
+                    <button type="button" class="btn-delete" onclick="confirmDeleteClient()">Excluir</button>
+                </div>
+            </div>
+        </div>
+        </div> <!-- Fecha main-wrapper -->
+    </div>
+
+    <script src="js/theme.js"></script>
+    <script src="js/clientes.js"></script>
+</body>
+</html>

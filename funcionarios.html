@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funcionários - Barbearia MV</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/funcionarios.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar para Desktop -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-cut"></i>
+                    <span>Barbearia MV</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="dashboard.html" class="nav-link">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="agenda.html" class="nav-link">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Agendamentos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="clientes.html" class="nav-link">
+                            <i class="fas fa-users"></i>
+                            <span>Clientes</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="funcionarios.html" class="nav-link">
+                            <i class="fas fa-user-tie"></i>
+                            <span>Funcionários</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="vendas.html" class="nav-link">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Vendas</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="caixa.html" class="nav-link">
+                            <i class="fas fa-cash-register"></i>
+                            <span>Caixa</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="relatorios.html" class="nav-link">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Relatórios</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="menu.html" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Voltar ao Menu</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <div class="main-wrapper">
+        <header class="header">
+            <div class="header-content">
+                <button class="back-btn" onclick="window.location.href='menu.html'">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="logo">
+                    <img src="assets/logo.svg" alt="Barbearia MV">
+                    <h1>Funcionários</h1>
+                </div>
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <i class="fas fa-sun"></i>
+                </button>
+            </div>
+        </header>
+
+        <section class="employees-section">
+            <!-- Barra de ações -->
+            <div class="action-bar">
+                <div class="search-input-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Pesquisar funcionário..." oninput="searchEmployees()">
+                </div>
+                <button class="add-employee-btn" onclick="openAddEmployeeModal()">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Novo Funcionário</span>
+                </button>
+            </div>
+
+            <!-- Estatísticas -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <i class="fas fa-users"></i>
+                    <div class="stat-info">
+                        <span class="stat-number" id="totalEmployees">0</span>
+                        <span class="stat-label">Total de Funcionários</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-user-check"></i>
+                    <div class="stat-info">
+                        <span class="stat-number" id="activeEmployees">0</span>
+                        <span class="stat-label">Funcionários Ativos</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <i class="fas fa-percentage"></i>
+                    <div class="stat-info">
+                        <span class="stat-number" id="avgCommission">0%</span>
+                        <span class="stat-label">Comissão Média</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de funcionários -->
+            <div class="employees-grid" id="employeesGrid">
+                <!-- Funcionários serão renderizados aqui -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal de Funcionário -->
+    <div id="employeeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Novo Funcionário</h2>
+                <button class="close-btn" onclick="closeModal('employeeModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="employeeForm">
+                <div class="form-group">
+                    <label for="employeeName">Nome Completo *</label>
+                    <input type="text" id="employeeName" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="employeePhone">Telefone</label>
+                        <input type="tel" id="employeePhone" placeholder="(11) 99999-9999">
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeEmail">Email</label>
+                        <input type="email" id="employeeEmail">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="employeeCommission">Porcentagem de Ganho (%) *</label>
+                        <input type="number" id="employeeCommission" min="0" max="100" step="0.1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="employeeRole">Função</label>
+                        <select id="employeeRole">
+                            <option value="barbeiro">Barbeiro</option>
+                            <option value="assistente">Assistente</option>
+                            <option value="gerente">Gerente</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="employeeNotes">Observações</label>
+                    <textarea id="employeeNotes" rows="3" placeholder="Informações adicionais..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" onclick="closeModal('employeeModal')">Cancelar</button>
+                    <button type="submit" class="save-btn" id="saveEmployeeBtn">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Credenciais -->
+    <div id="credentialsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Gerenciar Credenciais</h2>
+                <button class="close-btn" onclick="closeModal('credentialsModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="employee-info">
+                <h3 id="credentialsEmployeeName"></h3>
+                <p id="credentialsEmployeeRole"></p>
+            </div>
+            <form id="credentialsForm">
+                <div class="form-group">
+                    <label for="employeeUsername">Nome de Usuário *</label>
+                    <input type="text" id="employeeUsername" required>
+                </div>
+                <div class="form-group">
+                    <label for="employeePassword">Senha *</label>
+                    <div class="password-input">
+                        <input type="password" id="employeePassword" required>
+                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility()">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar Senha *</label>
+                    <input type="password" id="confirmPassword" required>
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="employeeActive" checked>
+                        <span class="checkmark"></span>
+                        Funcionário ativo
+                    </label>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" onclick="closeModal('credentialsModal')">Cancelar</button>
+                    <button type="submit" class="save-btn">Salvar Credenciais</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Exclusão -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content delete-modal">
+            <div class="modal-header">
+                <h2>Confirmar Exclusão</h2>
+                <button class="close-btn" onclick="closeModal('deleteModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="delete-content">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Tem certeza que deseja excluir o funcionário <strong class="delete-employee-name"></strong>?</p>
+                <p class="warning-text">Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="cancel-btn" onclick="closeModal('deleteModal')">Cancelar</button>
+                <button type="button" class="delete-btn" onclick="confirmDeleteEmployee()">Excluir</button>
+            </div>
+        </div>
+        </div> <!-- Fecha main-wrapper -->
+    </div>
+
+    <script src="js/theme.js"></script>
+    <script src="js/funcionarios.js"></script>
+</body>
+</html>

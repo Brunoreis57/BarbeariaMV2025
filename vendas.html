@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendas - Barbearia MV 2025</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/vendas.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar para Desktop -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-cut"></i>
+                    <span>Barbearia MV</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="dashboard.html" class="nav-link">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="agenda.html" class="nav-link">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Agendamentos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="clientes.html" class="nav-link">
+                            <i class="fas fa-users"></i>
+                            <span>Clientes</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="funcionarios.html" class="nav-link">
+                            <i class="fas fa-user-tie"></i>
+                            <span>Funcionários</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="vendas.html" class="nav-link">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Vendas</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="caixa.html" class="nav-link">
+                            <i class="fas fa-cash-register"></i>
+                            <span>Caixa</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="relatorios.html" class="nav-link">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Relatórios</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="menu.html" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Voltar ao Menu</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <div class="main-wrapper">
+        <header class="header">
+            <div class="header-content">
+                <a href="menu.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <h1><i class="fas fa-shopping-cart"></i> Vendas</h1>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Tabs Navigation -->
+            <div class="tabs-container">
+                <div class="tabs-nav">
+                    <button class="tab-btn active" data-tab="cortes">
+                        <i class="fas fa-cut"></i>
+                        Cortes & Serviços
+                    </button>
+                    <button class="tab-btn" data-tab="produtos">
+                        <i class="fas fa-box"></i>
+                        Produtos
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cortes Tab Content -->
+            <div class="tab-content active" id="cortes-tab">
+                <div class="section-header">
+                    <h2>Cortes & Serviços</h2>
+                    <button class="add-btn" onclick="openServiceModal()">
+                        <i class="fas fa-plus"></i>
+                        Adicionar Serviço
+                    </button>
+                </div>
+
+                <div class="search-container">
+                    <input type="text" id="serviceSearch" placeholder="Buscar serviços..." class="search-input">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+
+                <div class="services-grid" id="servicesGrid">
+                    <!-- Services will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Produtos Tab Content -->
+            <div class="tab-content" id="produtos-tab">
+                <div class="section-header">
+                    <h2>Produtos</h2>
+                    <button class="add-btn" onclick="openProductModal()">
+                        <i class="fas fa-plus"></i>
+                        Adicionar Produto
+                    </button>
+                </div>
+
+                <div class="search-container">
+                    <input type="text" id="productSearch" placeholder="Buscar produtos..." class="search-input">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+
+                <div class="products-grid" id="productsGrid">
+                    <!-- Products will be loaded here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Service Modal -->
+    <div class="modal" id="serviceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="serviceModalTitle">Adicionar Serviço</h3>
+                <button class="close-btn" onclick="closeServiceModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="serviceForm">
+                <div class="form-group">
+                    <label for="serviceName">Nome do Serviço *</label>
+                    <input type="text" id="serviceName" required>
+                </div>
+                <div class="form-group">
+                    <label for="servicePrice">Preço (R$) *</label>
+                    <input type="number" id="servicePrice" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="serviceDuration">Duração (minutos)</label>
+                    <input type="number" id="serviceDuration" min="1">
+                </div>
+                <div class="form-group">
+                    <label for="serviceDescription">Descrição</label>
+                    <textarea id="serviceDescription" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" onclick="closeServiceModal()">Cancelar</button>
+                    <button type="submit" class="save-btn">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="productModalTitle">Adicionar Produto</h3>
+                <button class="close-btn" onclick="closeProductModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="productForm">
+                <div class="form-group">
+                    <label for="productName">Nome do Produto *</label>
+                    <input type="text" id="productName" required>
+                </div>
+                <div class="form-group">
+                    <label for="productPrice">Preço (R$) *</label>
+                    <input type="number" id="productPrice" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="productStock">Estoque</label>
+                    <input type="number" id="productStock" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="productCategory">Categoria</label>
+                    <select id="productCategory">
+                        <option value="">Selecione uma categoria</option>
+                        <option value="cabelo">Produtos para Cabelo</option>
+                        <option value="barba">Produtos para Barba</option>
+                        <option value="cuidados">Cuidados Pessoais</option>
+                        <option value="acessorios">Acessórios</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="productDescription">Descrição</label>
+                    <textarea id="productDescription" rows="3"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" onclick="closeProductModal()">Cancelar</button>
+                    <button type="submit" class="save-btn">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirmar Exclusão</h3>
+                <button class="close-btn" onclick="closeDeleteModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="deleteMessage">Tem certeza que deseja excluir este item?</p>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="cancel-btn" onclick="closeDeleteModal()">Cancelar</button>
+                <button type="button" class="delete-btn" id="confirmDeleteBtn">Excluir</button>
+            </div>
+        </div>
+        </div> <!-- Fecha main-wrapper -->
+    </div>
+
+    <script src="js/theme.js"></script>
+    <script src="js/vendas.js"></script>
+</body>
+</html>

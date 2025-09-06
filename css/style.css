@@ -1,0 +1,214 @@
+/* Estilos gerais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #1a1a1a, #333);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+}
+
+/* Estilos do container de login */
+.login-container {
+    background-color: rgba(25, 25, 25, 0.8);
+    border-radius: 10px;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+}
+
+/* Estilos do logo */
+.logo-container {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo {
+    width: 120px;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+.logo-container h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #f8f8f8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Estilos do formulário */
+.form-container {
+    width: 100%;
+    max-width: 400px;
+}
+
+.form-container h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+    color: #f8f8f8;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.input-group i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 15px 15px 15px 45px;
+    border: none;
+    border-radius: 5px;
+    background-color: #2a2a2a;
+    color: #fff;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    outline: none;
+    background-color: #333;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+}
+
+.input-group input::placeholder {
+    color: #888;
+}
+
+/* Estilos para lembrar-me e esqueceu senha */
+.remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    font-size: 14px;
+}
+
+.remember-forgot input[type="checkbox"] {
+    margin-right: 5px;
+    accent-color: #00CED1;
+}
+
+.forgot-password {
+    color: #00CED1;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.forgot-password:hover {
+    color: #20B2AA;
+    text-decoration: underline;
+}
+
+/* Estilos do botão de login */
+.btn-login {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    background: linear-gradient(135deg, #00CED1, #20B2AA);
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-login:hover {
+    background: linear-gradient(135deg, #20B2AA, #00CED1);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 206, 209, 0.4);
+}
+
+.btn-login:active {
+    transform: translateY(0);
+}
+
+/* Estilos do link de registro */
+.register-link {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 14px;
+}
+
+.register-link a {
+    color: #00CED1;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.register-link a:hover {
+    color: #20B2AA;
+    text-decoration: underline;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 30px 20px;
+    }
+    
+    .logo {
+        width: 100px;
+    }
+    
+    .logo-container h1 {
+        font-size: 24px;
+    }
+    
+    .form-container h2 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .input-group input {
+        padding: 12px 12px 12px 40px;
+    }
+    
+    .btn-login {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        padding: 20px 15px;
+    }
+    
+    .remember-forgot {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}

@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <!-- Fundo circular -->
+  <circle cx="100" cy="100" r="95" fill="#1a1a1a" stroke="#00CED1" stroke-width="5"/>
+  
+  <!-- Tesoura -->
+  <g transform="translate(100, 100) rotate(-30) translate(-100, -100)">
+    <!-- Lâmina 1 -->
+    <path d="M70,60 L130,120" stroke="#f8f8f8" stroke-width="8" stroke-linecap="round"/>
+    <!-- Lâmina 2 -->
+    <path d="M70,120 L130,60" stroke="#f8f8f8" stroke-width="8" stroke-linecap="round"/>
+    
+    <!-- Cabo 1 -->
+    <path d="M70,60 L50,40" stroke="#00CED1" stroke-width="8" stroke-linecap="round"/>
+    <!-- Cabo 2 -->
+    <path d="M70,120 L50,140" stroke="#00CED1" stroke-width="8" stroke-linecap="round"/>
+    
+    <!-- Círculos nas pontas -->
+    <circle cx="70" cy="60" r="8" fill="#00CED1"/>
+    <circle cx="70" cy="120" r="8" fill="#00CED1"/>
+  </g>
+  
+  <!-- Pente de barbeiro -->
+  <g transform="translate(115, 85)">
+    <rect x="0" y="0" width="30" height="50" rx="5" fill="#00CED1"/>
+    
+    <!-- Dentes do pente -->
+    <rect x="30" y="5" width="10" height="5" fill="#00CED1"/>
+    <rect x="30" y="15" width="10" height="5" fill="#00CED1"/>
+    <rect x="30" y="25" width="10" height="5" fill="#00CED1"/>
+    <rect x="30" y="35" width="10" height="5" fill="#00CED1"/>
+    <rect x="30" y="45" width="10" height="5" fill="#00CED1"/>
+  </g>
+  
+  <!-- Texto MV -->
+  <text x="100" y="160" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#f8f8f8">MV</text>
+</svg>

@@ -1,0 +1,1242 @@
+/* Estilos gerais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+}
+
+body {
+    background: linear-gradient(135deg, #1a1a1a, #333);
+    min-height: 100vh;
+    color: #fff;
+}
+
+/* Container principal da agenda */
+.agenda-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    overflow-x: hidden;
+}
+
+/* Sidebar - Desktop */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 280px;
+    height: 100vh;
+    background: linear-gradient(180deg, #1a1a1a 0%, #2d2d2d 100%);
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-header {
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.sidebar .logo i {
+    color: #17a2b8;
+    font-size: 24px;
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: 20px 0;
+}
+
+.nav-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-item {
+    margin-bottom: 5px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-left: 3px solid transparent;
+}
+
+.nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-left-color: #17a2b8;
+}
+
+.nav-item.active .nav-link {
+    background-color: rgba(23, 162, 184, 0.1);
+    color: #17a2b8;
+    border-left-color: #17a2b8;
+}
+
+.nav-link i {
+    width: 20px;
+    text-align: center;
+}
+
+.sidebar-footer {
+    padding: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logout-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Main wrapper para desktop */
+.main-wrapper {
+    flex: 1;
+    transition: margin-left 0.3s ease;
+}
+
+/* Media Queries para Desktop */
+@media (min-width: 1024px) {
+    .sidebar {
+        display: flex;
+    }
+    
+    .main-wrapper {
+        margin-left: 280px;
+    }
+    
+    .header {
+        display: none;
+    }
+    
+    .agenda-container {
+        padding-top: 0;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 20px auto 0 auto;
+        padding: 20px;
+    }
+    
+    /* Layout desktop para cards de ação */
+    .action-cards {
+        padding: 0;
+        margin-bottom: 40px;
+    }
+    
+    .card-container {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        max-width: none;
+        margin: 0;
+    }
+    
+    .action-card {
+        padding: 25px;
+        aspect-ratio: 1.2;
+    }
+    
+    /* Layout desktop para agenda semanal */
+    .weekly-schedule {
+        padding: 0;
+        flex-grow: 1;
+    }
+    
+    .schedule-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 15px;
+    }
+    
+    .day-item {
+        min-height: 200px;
+    }
+    
+    /* Filtros em linha no desktop */
+    .view-filters {
+        justify-content: flex-start;
+        margin-bottom: 30px;
+        padding: 0;
+    }
+    
+    .filter-btn {
+        min-width: 100px;
+        padding: 15px 20px;
+    }
+    
+    /* Modal maior no desktop */
+    .modal-content {
+        max-width: 500px;
+        margin: 5% auto;
+    }
+}
+
+/* Cabeçalho */
+.header {
+    background-color: rgba(25, 25, 25, 0.9);
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 100%;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    color: #00CED1;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+    background-color: rgba(0, 206, 209, 0.1);
+    transform: scale(1.1);
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.logo {
+    width: 30px;
+    height: auto;
+    margin-right: 10px;
+}
+
+.logo-container h1 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #f8f8f8;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Alternador de tema */
+.theme-toggle {
+    position: relative;
+    display: inline-block;
+}
+
+.theme-switch {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.theme-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    width: 50px;
+    height: 25px;
+    background-color: #2a2a2a;
+    border-radius: 30px;
+    position: relative;
+    padding: 0 5px;
+    transition: background-color 0.3s;
+}
+
+.theme-label:after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #00CED1;
+    top: 2.5px;
+    left: 2.5px;
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+.theme-switch:checked + .theme-label:after {
+    transform: translateX(25px);
+}
+
+.theme-switch:checked + .theme-label {
+    background-color: #444;
+}
+
+.fa-sun, .fa-moon {
+    color: #f8f8f8;
+    font-size: 12px;
+}
+
+/* Cards de Ação */
+.action-cards {
+    padding: 20px;
+}
+
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.action-card {
+    background-color: rgba(25, 25, 25, 0.8);
+    border-radius: 15px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    aspect-ratio: 1;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.action-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 206, 209, 0.4);
+    background-color: rgba(35, 35, 35, 0.9);
+}
+
+.action-card .card-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: #00CED1;
+}
+
+.action-card .card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* Agenda Semanal */
+.weekly-schedule {
+    flex-grow: 1;
+    padding: 20px;
+    padding-top: 0;
+}
+
+/* Filtros de Visualização */
+.view-filters {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 0 10px;
+}
+
+.filter-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    background: rgba(25, 25, 25, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: #ccc;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 70px;
+    font-size: 12px;
+}
+
+.filter-btn:hover {
+    background: rgba(0, 206, 209, 0.1);
+    border-color: rgba(0, 206, 209, 0.3);
+    color: #00CED1;
+    transform: translateY(-2px);
+}
+
+.filter-btn.active {
+    background: rgba(0, 206, 209, 0.2);
+    border-color: #00CED1;
+    color: #00CED1;
+}
+
+.filter-btn i {
+    font-size: 16px;
+}
+
+.filter-btn span {
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.schedule-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    padding: 0 10px;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    color: #00CED1;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+    background-color: rgba(0, 206, 209, 0.1);
+    transform: scale(1.1);
+}
+
+.week-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #f8f8f8;
+    text-align: center;
+}
+
+.schedule-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Calendário Mensal */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.calendar-day-header {
+    background-color: rgba(0, 206, 209, 0.2);
+    color: #00CED1;
+    padding: 10px 5px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.calendar-day {
+    background-color: rgba(25, 25, 25, 0.8);
+    min-height: 60px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.calendar-day:hover {
+    background-color: rgba(0, 206, 209, 0.1);
+}
+
+.calendar-day.empty {
+    background-color: transparent;
+    cursor: default;
+}
+
+.calendar-day.today {
+    background-color: rgba(0, 206, 209, 0.3);
+    border-color: #00CED1;
+}
+
+.calendar-day.has-appointments {
+    background-color: rgba(0, 206, 209, 0.15);
+}
+
+.calendar-day-number {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.calendar-appointment-count {
+    font-size: 10px;
+    color: #00CED1;
+    background-color: rgba(0, 206, 209, 0.2);
+    padding: 2px 6px;
+    border-radius: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+.day-item {
+    background-color: rgba(25, 25, 25, 0.8);
+    border-radius: 10px;
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.day-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #00CED1;
+}
+
+.day-date {
+    font-size: 14px;
+    color: #ccc;
+}
+
+.appointments {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.appointment {
+    background-color: rgba(0, 206, 209, 0.1);
+    border-left: 3px solid #00CED1;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.appointment-info {
+    flex-grow: 1;
+}
+
+.appointment-time {
+    font-size: 14px;
+    font-weight: 600;
+    color: #00CED1;
+    margin-bottom: 2px;
+}
+
+.appointment-client {
+    font-size: 13px;
+    color: #fff;
+    margin-bottom: 2px;
+}
+
+.appointment-service {
+    font-size: 12px;
+    color: #ccc;
+}
+
+.appointment-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: #ccc;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    color: #00CED1;
+    background-color: rgba(0, 206, 209, 0.1);
+}
+
+.no-appointments {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    padding: 20px;
+}
+
+/* Modais */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+/* Seletor de tipo de cliente */
+.client-type-selector {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.client-type-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border: 2px solid #2c3e50;
+    background: transparent;
+    color: #2c3e50;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.client-type-btn:hover {
+    background: rgba(44, 62, 80, 0.1);
+    transform: translateY(-2px);
+}
+
+.client-type-btn.active {
+    background: #2c3e50;
+    color: white;
+    box-shadow: 0 4px 12px rgba(44, 62, 80, 0.3);
+}
+
+.client-type-btn i {
+    font-size: 16px;
+}
+
+.modal-content {
+    background-color: rgba(25, 25, 25, 0.95);
+    margin: 10% auto;
+    padding: 0;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header h3 {
+    color: #f8f8f8;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #ccc;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+    color: #ff4444;
+    background-color: rgba(255, 68, 68, 0.1);
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #f8f8f8;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #000;
+    font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #00CED1;
+    box-shadow: 0 0 0 2px rgba(0, 206, 209, 0.2);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.btn-cancel,
+.btn-confirm {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-cancel {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ccc;
+}
+
+.btn-cancel:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.btn-confirm {
+    background: linear-gradient(135deg, #00CED1, #20B2AA);
+    color: white;
+}
+
+.btn-confirm:hover {
+    background: linear-gradient(135deg, #20B2AA, #00CED1);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 206, 209, 0.4);
+}
+
+/* Modo claro */
+body.light-mode {
+    background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+    color: #333;
+}
+
+body.light-mode .header {
+    background-color: rgba(240, 240, 240, 0.9);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .logo-container h1 {
+    color: #333;
+}
+
+body.light-mode .week-title {
+    color: #333;
+}
+
+body.light-mode .action-card {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #333;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+body.light-mode .action-card:hover {
+    box-shadow: 0 8px 20px rgba(0, 206, 209, 0.3);
+    background-color: rgba(255, 255, 255, 1);
+}
+
+body.light-mode .action-card .card-title {
+    color: #333;
+}
+
+body.light-mode .filter-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #666;
+}
+
+body.light-mode .filter-btn:hover {
+    background: rgba(0, 206, 209, 0.1);
+    border-color: rgba(0, 206, 209, 0.3);
+    color: #00CED1;
+}
+
+body.light-mode .filter-btn.active {
+    background: rgba(0, 206, 209, 0.2);
+    border-color: #00CED1;
+    color: #00CED1;
+}
+
+body.light-mode .client-type-btn {
+    border-color: #2c3e50;
+    color: #2c3e50;
+}
+
+body.light-mode .client-type-btn:hover {
+    background: rgba(44, 62, 80, 0.1);
+}
+
+body.light-mode .client-type-btn.active {
+    background: #2c3e50;
+    color: white;
+    box-shadow: 0 4px 12px rgba(44, 62, 80, 0.3);
+}
+
+body.light-mode .calendar-grid {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .calendar-day {
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .calendar-day:hover {
+    background-color: rgba(0, 206, 209, 0.1);
+}
+
+body.light-mode .calendar-day.today {
+    background-color: rgba(0, 206, 209, 0.3);
+}
+
+body.light-mode .calendar-day.has-appointments {
+    background-color: rgba(0, 206, 209, 0.15);
+}
+
+body.light-mode .calendar-day-number {
+    color: #333;
+}
+
+body.light-mode .day-item {
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .day-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .day-date {
+    color: #666;
+}
+
+body.light-mode .appointment-client {
+    color: #333;
+}
+
+body.light-mode .appointment-service {
+    color: #666;
+}
+
+body.light-mode .modal-content {
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .modal-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .modal-header h3 {
+    color: #333;
+}
+
+body.light-mode .form-group label {
+    color: #333;
+}
+
+body.light-mode .form-group input,
+body.light-mode .form-group select {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #333;
+}
+
+body.light-mode .no-appointments {
+    color: #999;
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+    .action-cards {
+        padding: 15px;
+    }
+    
+    .card-container {
+        gap: 10px;
+    }
+    
+    .action-card {
+        padding: 15px;
+    }
+    
+    .action-card .card-icon {
+        font-size: 28px;
+    }
+    
+    .action-card .card-title {
+        font-size: 14px;
+    }
+    
+    .weekly-schedule {
+        padding: 15px;
+        padding-top: 0;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 5% auto;
+    }
+}
+
+/* Estilos específicos do modal de finalização */
+#finishCutModal .modal-content {
+    max-width: 450px;
+}
+
+.client-display,
+.service-display,
+.price-display {
+    display: inline-block;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #f8f8f8;
+    font-weight: 500;
+    margin-top: 5px;
+    min-width: 100px;
+}
+
+.price-display {
+    color: #4CAF50;
+    font-weight: 600;
+}
+
+#finishCutForm .form-group {
+    margin-bottom: 20px;
+}
+
+#finishCutForm label {
+    display: block;
+    margin-bottom: 8px;
+    color: #f8f8f8;
+    font-weight: 500;
+}
+
+#paymentType {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #f8f8f8;
+    font-size: 14px;
+}
+
+#paymentType:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+#finishNotes {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #f8f8f8;
+    font-size: 14px;
+    resize: vertical;
+    min-height: 80px;
+}
+
+#finishNotes:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-secondary {
+    padding: 12px 24px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: transparent;
+    color: #f8f8f8;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.btn-primary {
+    padding: 12px 24px;
+    border: none;
+    background: #4CAF50;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: #45a049;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+/* Light mode para modal de finalização */
+body.light-mode #finishCutModal .modal-content {
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .client-display,
+body.light-mode .service-display,
+body.light-mode .price-display {
+    background: rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+body.light-mode .price-display {
+    color: #2E7D32;
+}
+
+body.light-mode #finishCutForm label {
+    color: #333;
+}
+
+body.light-mode #paymentType,
+body.light-mode #finishNotes {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.2);
+    color: #333;
+}
+
+body.light-mode #paymentType:focus,
+body.light-mode #finishNotes:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+}
+
+body.light-mode .btn-secondary {
+    border-color: rgba(0, 0, 0, 0.3);
+    color: #333;
+}
+
+body.light-mode .btn-secondary:hover {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.5);
+}
+
+body.light-mode .form-actions {
+    border-top-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para checkbox customizado */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+    color: #f8f8f8;
+    gap: 12px;
+}
+
+.checkbox-label input[type="checkbox"] {
+    display: none;
+}
+
+.checkmark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark {
+    background: #4CAF50;
+    border-color: #4CAF50;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.checkbox-label:hover .checkmark {
+    border-color: #4CAF50;
+    background: rgba(76, 175, 80, 0.1);
+}
+
+/* Light mode para checkbox */
+body.light-mode .checkbox-label {
+    color: #333;
+}
+
+body.light-mode .checkmark {
+    border-color: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.05);
+}
+
+body.light-mode .checkbox-label:hover .checkmark {
+    border-color: #4CAF50;
+    background: rgba(76, 175, 80, 0.1);
+}
+
+/* Estilos para botão de finalizar */
+.finish-btn {
+    border: none !important;
+    color: white !important;
+    transition: all 0.3s ease;
+}
+
+/* Botão vermelho - não pago */
+.finish-btn.unpaid {
+    background: #f44336 !important;
+}
+
+.finish-btn.unpaid:hover {
+    background: #d32f2f !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
+}
+
+/* Botão verde - pago */
+.finish-btn.paid {
+    background: #4CAF50 !important;
+}
+
+.finish-btn.paid:hover {
+    background: #45a049 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+/* Estilos para agendamentos finalizados */
+.appointment.finished {
+    opacity: 0.7;
+    background: rgba(76, 175, 80, 0.1);
+    border-left: 4px solid #4CAF50;
+}
+
+.appointment.finished .appointment-info {
+    position: relative;
+}
+
+.appointment.finished .appointment-info::after {
+    content: '✓ Finalizado';
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: #4CAF50;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+/* Light mode para agendamentos finalizados */
+body.light-mode .appointment.finished {
+    background: rgba(76, 175, 80, 0.1);
+    border-left-color: #4CAF50;
+}
+
+body.light-mode .appointment.finished .appointment-info::after {
+    background: #4CAF50;
+    color: white;
+}

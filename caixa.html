@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbearia MV - Caixa</title>
+    <link rel="stylesheet" href="css/caixa.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar para Desktop -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-cut"></i>
+                    <span>Barbearia MV</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="dashboard.html" class="nav-link">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="agenda.html" class="nav-link">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Agendamentos</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="clientes.html" class="nav-link">
+                            <i class="fas fa-users"></i>
+                            <span>Clientes</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="funcionarios.html" class="nav-link">
+                            <i class="fas fa-user-tie"></i>
+                            <span>Funcionários</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="vendas.html" class="nav-link">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Vendas</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="caixa.html" class="nav-link">
+                            <i class="fas fa-cash-register"></i>
+                            <span>Caixa</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="relatorios.html" class="nav-link">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Relatórios</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="menu.html" class="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Voltar ao Menu</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <div class="main-wrapper">
+        <!-- Cabeçalho -->
+        <div class="header">
+            <div class="header-content">
+                <button class="back-btn" onclick="window.location.href='menu.html'">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="logo">
+                    <img src="assets/logo.svg" alt="Logo Barbearia MV">
+                    <h1>Caixa</h1>
+                </div>
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <i class="fas fa-sun"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Seção de Caixa -->
+        <div class="cash-section">
+            <!-- Barra de ações -->
+            <div class="action-bar">
+                <div class="search-input-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Pesquisar despesas..." oninput="searchExpenses()">
+                </div>
+                <button class="add-expense-btn" onclick="openAddExpenseModal()">
+                    <i class="fas fa-plus"></i>
+                    <span>Nova Despesa</span>
+                </button>
+            </div>
+
+            <!-- Controle de Saldo -->
+            <div class="cash-balance-section">
+                <div class="balance-card">
+                    <div class="balance-header">
+                        <h2><i class="fas fa-wallet"></i> Saldo em Caixa</h2>
+                        <div class="balance-amount" id="cashBalance">R$ 0,00</div>
+                    </div>
+                    <div class="balance-actions">
+                        <button class="balance-btn add-money" onclick="openCashModal('add')">
+                            <i class="fas fa-plus"></i>
+                            <span>Adicionar Dinheiro</span>
+                        </button>
+                        <button class="balance-btn remove-money" onclick="openCashModal('remove')">
+                            <i class="fas fa-minus"></i>
+                            <span>Retirar Dinheiro</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Container de estatísticas -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="totalExpenses">0</span>
+                        <span class="stat-label">Total de Despesas</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="totalAmount">R$ 0,00</span>
+                        <span class="stat-label">Valor Total Gasto</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="todayExpenses">0</span>
+                        <span class="stat-label">Despesas Hoje</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="monthlyAverage">R$ 0,00</span>
+                        <span class="stat-label">Média Mensal</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filters-container">
+                <select id="categoryFilter" onchange="filterExpenses()">
+                    <option value="">Todas as Categorias</option>
+                    <option value="alimentacao">Alimentação</option>
+                    <option value="limpeza">Limpeza</option>
+                    <option value="equipamentos">Equipamentos</option>
+                    <option value="manutencao">Manutenção</option>
+                    <option value="outros">Outros</option>
+                </select>
+                <select id="userFilter" onchange="filterExpenses()">
+                    <option value="">Todos os Usuários</option>
+                </select>
+                <input type="date" id="dateFilter" onchange="filterExpenses()">
+            </div>
+
+            <!-- Grid de despesas -->
+            <div class="expenses-grid" id="expensesGrid">
+                <!-- Despesas serão inseridas aqui via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Adicionar/Editar Despesa -->
+    <div id="expenseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Nova Despesa</h2>
+                <button class="close-btn" onclick="closeModal('expenseModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="expenseForm">
+                <div class="form-group">
+                    <label for="expenseDescription">Descrição *</label>
+                    <input type="text" id="expenseDescription" required placeholder="Ex: Café, açúcar, produtos de limpeza...">
+                </div>
+                <div class="form-group">
+                    <label for="expenseAmount">Valor *</label>
+                    <input type="number" id="expenseAmount" step="0.01" min="0" required placeholder="0,00">
+                </div>
+                <div class="form-group">
+                    <label for="expenseCategory">Categoria *</label>
+                    <select id="expenseCategory" required>
+                        <option value="">Selecione uma categoria</option>
+                        <option value="alimentacao">Alimentação</option>
+                        <option value="limpeza">Limpeza</option>
+                        <option value="equipamentos">Equipamentos</option>
+                        <option value="manutencao">Manutenção</option>
+                        <option value="outros">Outros</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="expenseUser">Usuário Responsável *</label>
+                    <input type="text" id="expenseUser" required placeholder="Nome do usuário">
+                </div>
+                <div class="form-group">
+                    <label for="expenseDate">Data</label>
+                    <input type="date" id="expenseDate">
+                </div>
+                <div class="form-group">
+                    <label for="expenseNotes">Observações</label>
+                    <textarea id="expenseNotes" rows="3" placeholder="Observações adicionais (opcional)"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" onclick="closeModal('expenseModal')">Cancelar</button>
+                    <button type="submit" class="save-btn" id="saveExpenseBtn">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content small">
+            <div class="modal-header">
+                <h2>Confirmar Exclusão</h2>
+                <button class="close-btn" onclick="closeModal('deleteModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Tem certeza que deseja excluir esta despesa?</p>
+                <p class="delete-expense-description"></p>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="cancel-btn" onclick="closeModal('deleteModal')">Cancelar</button>
+                <button type="button" class="delete-btn" onclick="confirmDeleteExpense()">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de controle de dinheiro -->
+    <div id="cashModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="cashModalTitle">Controle de Caixa</h2>
+                <button class="close-btn" onclick="closeModal('cashModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="cashForm">
+                <div class="form-group">
+                    <label for="cashAmount">Valor (R$) *</label>
+                    <input type="number" id="cashAmount" step="0.01" min="0.01" required placeholder="0,00">
+                </div>
+                
+                <div class="form-group">
+                    <label for="cashDescription">Descrição *</label>
+                    <input type="text" id="cashDescription" placeholder="Ex: Troco inicial, Retirada para banco..." required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="cashUser">Usuário Responsável *</label>
+                    <input type="text" id="cashUser" placeholder="Nome do responsável" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="cashNotes">Observações</label>
+                    <textarea id="cashNotes" rows="3" placeholder="Observações adicionais (opcional)"></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="cancel-btn" onclick="closeModal('cashModal')">Cancelar</button>
+                    <button type="submit" class="save-btn" id="saveCashBtn">Salvar</button>
+                </div>
+            </form>
+        </div>
+        </div> <!-- Fecha main-wrapper -->
+    </div>
+
+    <script src="js/theme.js"></script>
+    <script src="js/caixa.js"></script>
+</body>
+</html>

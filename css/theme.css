@@ -1,0 +1,150 @@
+/* Sistema de Tema Global */
+:root {
+    /* Tema Escuro (padrão) */
+    --bg-primary: linear-gradient(135deg, #1a1a1a, #333);
+    --bg-secondary: rgba(25, 25, 25, 0.8);
+    --bg-tertiary: #2a2a2a;
+    --bg-hover: #333;
+    --text-primary: #fff;
+    --text-secondary: rgba(255, 255, 255, 0.8);
+    --text-muted: rgba(255, 255, 255, 0.6);
+    --text-accent: #ccc;
+    --border-color: #2a2a2a;
+    --accent-color: #00CED1;
+    --shadow-primary: 0 15px 25px rgba(0, 0, 0, 0.6);
+    --shadow-hover: 0 0 5px rgba(255, 255, 255, 0.2);
+    --header-bg: rgba(25, 25, 25, 0.9);
+    --header-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Tema Claro */
+body.light-mode {
+    --bg-primary: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+    --bg-secondary: rgba(255, 255, 255, 0.9);
+    --bg-tertiary: #f5f5f5;
+    --bg-hover: #e8e8e8;
+    --text-primary: #333;
+    --text-secondary: #555;
+    --text-muted: #777;
+    --text-accent: #666;
+    --border-color: rgba(0, 0, 0, 0.2);
+    --accent-color: #00CED1;
+    --shadow-primary: 0 15px 25px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 0 5px rgba(0, 0, 0, 0.2);
+    --header-bg: rgba(240, 240, 240, 0.9);
+    --header-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Aplicação das variáveis globais */
+body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.container {
+    background: var(--bg-primary);
+}
+
+.header {
+    background-color: var(--header-bg);
+    box-shadow: var(--header-shadow);
+}
+
+.back-btn {
+    background-color: var(--bg-tertiary);
+}
+
+.back-btn:hover {
+    background-color: var(--bg-hover);
+    box-shadow: var(--shadow-hover);
+}
+
+/* Cards e containers */
+.metric-card,
+.appointments-container,
+.activities-container,
+.menu-card {
+    background-color: var(--bg-secondary);
+    box-shadow: var(--shadow-primary);
+}
+
+.appointment-item,
+.activity-item {
+    background-color: var(--bg-tertiary);
+}
+
+.appointment-item:hover,
+.activity-item:hover {
+    background-color: var(--bg-hover);
+    box-shadow: var(--shadow-hover);
+}
+
+/* Textos */
+h1, h2, h3, h4 {
+    color: var(--text-primary);
+}
+
+.card-content h3,
+.appointment-info p,
+.activity-content p {
+    color: var(--text-secondary);
+}
+
+.date-display,
+.activity-time {
+    color: var(--text-muted);
+}
+
+.section-header h2 i,
+.appointment-time i {
+    color: var(--text-accent);
+}
+
+/* Bordas */
+.section-header {
+    border-bottom-color: var(--border-color);
+}
+
+.appointment-item {
+    border-left-color: var(--text-accent);
+}
+
+/* Inputs e formulários */
+.input-group input {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.input-group input:focus {
+    background-color: var(--bg-hover);
+    box-shadow: var(--shadow-hover);
+}
+
+/* Botões */
+.btn-primary {
+    background-color: var(--bg-tertiary);
+}
+
+.btn-primary:hover {
+    background-color: var(--bg-hover);
+    box-shadow: var(--shadow-hover);
+}
+
+/* Tabelas */
+table {
+    background-color: var(--bg-secondary);
+}
+
+th, td {
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+tr:hover {
+    background-color: var(--bg-hover);
+}
+
+/* Transições suaves para mudança de tema */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barbearia MV - Menu</title>
+    <link rel="stylesheet" href="css/menu.css">
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+    <div class="menu-container">
+        <div class="header">
+            <div class="logo-container">
+                <img src="assets/logo.svg" alt="Logo Barbearia MV" class="logo">
+                <h1>Barbearia MV</h1>
+            </div>
+            <div class="user-info">
+                <span class="user-name">Olá, Usuário</span>
+                <div class="theme-toggle">
+                    <input type="checkbox" id="theme-switch" class="theme-switch">
+                    <label for="theme-switch" class="theme-label">
+                        <i class="fas fa-sun"></i>
+                        <i class="fas fa-moon"></i>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="menu-grid">
+            <!-- Dashboard Card -->
+            <a href="dashboard.html" class="menu-card">
+                <div class="card-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="card-title">Dashboard</div>
+            </a>
+            
+            <!-- Agenda Card -->
+            <a href="agenda.html" class="menu-card">
+                <div class="card-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="card-title">Agenda</div>
+            </a>
+            
+            <!-- Clientes Card -->
+            <a href="clientes.html" class="menu-card">
+                <div class="card-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="card-title">Clientes</div>
+            </a>
+            
+            <!-- Funcionários Card -->
+            <a href="funcionarios.html" class="menu-card">
+                <div class="card-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="card-title">Funcionários</div>
+            </a>
+            
+            <!-- Caixa Card -->
+            <a href="caixa.html" class="menu-card">
+                <div class="card-icon">
+                    <i class="fas fa-cash-register"></i>
+                </div>
+                <div class="card-title">Caixa</div>
+            </a>
+            
+            <!-- Vendas Card -->
+            <a href="vendas.html" class="menu-card">
+                <div class="card-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="card-title">Vendas</div>
+            </a>
+            
+            <!-- Relatórios Card -->
+            <a href="relatorios.html" class="menu-card">
+                <div class="card-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <div class="card-title">Relatórios</div>
+            </a>
+            
+            <!-- Configurações Card -->
+            <a href="configuracoes.html" class="menu-card">
+                <div class="card-icon">
+                    <i class="fas fa-cog"></i>
+                </div>
+                <div class="card-title">Configurações</div>
+            </a>
+        </div>
+        
+        <div class="footer">
+            <a href="index.html" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                Sair
+            </a>
+        </div>
+    </div>
+    
+    <script src="js/theme.js"></script>
+    <script src="js/menu.js"></script>
+</body>
+</html>
