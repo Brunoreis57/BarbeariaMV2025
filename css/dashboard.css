@@ -35,7 +35,7 @@ body {
 }
 
 .header {
-    background: linear-gradient(135deg, rgba(64, 64, 64, 0.9), rgba(48, 48, 48, 0.95));
+    background: linear-gradient(135deg, rgba(45, 45, 45, 0.9), rgba(35, 35, 35, 0.95));
     padding: 15px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     position: sticky;
@@ -1041,11 +1041,11 @@ body {
       }
     
     .header {
-        background: linear-gradient(135deg, rgba(64, 64, 64, 0.9), rgba(48, 48, 48, 0.95));
+        background: linear-gradient(135deg, rgba(45, 45, 45, 0.9), rgba(35, 35, 35, 0.95));
         border-radius: 15px;
         padding: 25px 20px;
         margin-bottom: 25px;
-        border: 1px solid rgba(96, 96, 96, 0.3);
+        border: 1px solid rgba(60, 60, 60, 0.3);
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
     }
     
@@ -1084,6 +1084,7 @@ body {
         justify-content: space-between;
         align-items: center;
         text-align: center;
+        background: linear-gradient(135deg, rgba(45, 45, 45, 0.9), rgba(35, 35, 35, 0.95)) !important;
     }
     
     .cuts-card {
@@ -1105,6 +1106,7 @@ body {
         justify-content: space-between;
         align-items: center;
         text-align: center;
+        background: linear-gradient(135deg, rgba(45, 45, 45, 0.9), rgba(35, 35, 35, 0.95)) !important;
     }
     
     .metric-card {
@@ -1611,9 +1613,9 @@ body {
     .header {
         margin: 0;
         border-radius: 0;
-        background: linear-gradient(135deg, rgba(64, 64, 64, 0.9), rgba(48, 48, 48, 0.95));
+        background: linear-gradient(135deg, rgba(45, 45, 45, 0.9), rgba(35, 35, 35, 0.95));
         backdrop-filter: blur(10px);
-        border-bottom: 1px solid rgba(96, 96, 96, 0.3);
+        border-bottom: 1px solid rgba(60, 60, 60, 0.3);
     }
 
     .main-content {
