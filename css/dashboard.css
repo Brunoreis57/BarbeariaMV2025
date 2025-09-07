@@ -970,9 +970,9 @@ body {
            
            body:not(.light-mode) .sidebar-nav a:hover,
            body:not(.light-mode) .sidebar-nav a.active {
-               color: #00d4ff;
-               background: rgba(0, 212, 255, 0.1);
-               border-left: 3px solid #00d4ff;
+               color: #00CED1;
+               background: rgba(0, 206, 209, 0.1);
+               border-left: 3px solid #00CED1;
            }
            
            body.light-mode .sidebar-nav a {
@@ -991,20 +991,20 @@ body {
            
            /* Botão de tema na sidebar */
            body:not(.light-mode) .theme-toggle {
-               background: rgba(0, 212, 255, 0.1);
-               border: 1px solid rgba(0, 212, 255, 0.3);
-               color: #00d4ff;
+               background: rgba(0, 206, 209, 0.1);
+               border: 1px solid rgba(0, 206, 209, 0.3);
+               color: #00CED1;
            }
-           
+
            body:not(.light-mode) .theme-toggle:hover {
-               background: rgba(0, 212, 255, 0.2);
-               box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
+               background: rgba(0, 206, 209, 0.2);
+               box-shadow: 0 4px 15px rgba(0, 206, 209, 0.3);
            }
-           
+
            body.light-mode .theme-toggle {
-               background: rgba(23, 162, 184, 0.1);
-               border: 1px solid rgba(23, 162, 184, 0.3);
-               color: #17a2b8;
+               background: rgba(0, 206, 209, 0.1);
+               border: 1px solid rgba(0, 206, 209, 0.3);
+               color: #00CED1;
            }
            
            body.light-mode .theme-toggle:hover {
@@ -1506,7 +1506,7 @@ body {
     }
 
     .logo i {
-        color: #17a2b8;
+        color: #00CED1;
         font-size: 24px;
     }
 
@@ -1539,13 +1539,13 @@ body {
     .nav-link:hover {
         background-color: rgba(255, 255, 255, 0.05);
         color: #fff;
-        border-left-color: #17a2b8;
+        border-left-color: #00CED1;
     }
 
     .nav-item.active .nav-link {
-        background-color: rgba(23, 162, 184, 0.1);
-        color: #17a2b8;
-        border-left-color: #17a2b8;
+        background-color: rgba(0, 206, 209, 0.1);
+        color: #00CED1;
+        border-left-color: #00CED1;
     }
 
     .nav-link i {
