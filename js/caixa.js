@@ -6,7 +6,7 @@ let filteredExpenses = [];
 let cashBalance = 0;
 let cashTransactions = [];
 let cashModalType = null; // 'add' ou 'remove'
-let currentView = 'gallery'; // 'gallery' ou 'list'
+let currentView = 'list'; // 'gallery' ou 'list'
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', function() {
@@ -24,8 +24,8 @@ document.addEventListener('DOMContentLoaded', function() {
     populateUserFilter();
     setDefaultDate();
     
-    // Ativar botão de galeria por padrão
-    document.querySelector('.view-btn[data-view="gallery"]').classList.add('active');
+    // Ativar botão de lista por padrão
+    document.querySelector('.view-btn[data-view="list"]').classList.add('active');
 });
 
 // Configurar tema
