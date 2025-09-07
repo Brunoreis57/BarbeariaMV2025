@@ -14,18 +14,13 @@ document.addEventListener('DOMContentLoaded', function() {
     loadExpenses();
     loadCashBalance();
     setupEventListeners();
-    if (currentView === 'gallery') {
-        renderExpenses();
-    } else {
-        renderExpensesTable();
-    }
     updateStats();
     updateCashBalance();
     populateUserFilter();
     setDefaultDate();
     
-    // Ativar botão de lista por padrão
-    document.querySelector('.view-btn[data-view="list"]').classList.add('active');
+    // Inicializar modo lista por padrão
+    toggleView('list');
 });
 
 // Configurar tema
