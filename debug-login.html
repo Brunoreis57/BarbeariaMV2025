@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Login - Barbearia MV</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #1a1a1a;
+            color: #fff;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        button {
+            background: #00CED1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #20B2AA;
+        }
+        .user-list {
+            background: #333;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .test-form {
+            background: #333;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #555;
+            background: #444;
+            color: #fff;
+            border-radius: 3px;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Debug Login - Barbearia MV</h1>
+        
+        <div class="section">
+            <h2>📊 Status do Sistema</h2>
+            <div id="status"></div>
+            <button onclick="checkStatus()">Verificar Status</button>
+            <button onclick="clearData()">Limpar Dados</button>
+            <button onclick="createUsers()">Recriar Usuários</button>
+        </div>
+        
+        <div class="section">
+            <h2>👥 Usuários Cadastrados</h2>
+            <div id="userList"></div>
+            <button onclick="showUsers()">Mostrar Usuários</button>
+        </div>
+        
+        <div class="section">
+            <h2>🧪 Teste de Login</h2>
+            <div class="test-form">
+                <input type="text" id="testUsername" placeholder="Número de telefone">
+                <input type="password" id="testPassword" placeholder="Senha">
+                <button onclick="testLogin()">Testar Login</button>
+            </div>
+            <div id="testResult"></div>
+        </div>
+        
+        <div class="section">
+            <h2>📋 Credenciais Padrão</h2>
+            <div class="user-list">
+                <strong>Matheus:</strong> 48933002321 / matheus2025<br>
+                <strong>Vitor:</strong> 48991199474 / vitor2025<br>
+                <strong>Marcelo:</strong> 48996201178 / marcelo2025<br>
+                <strong>Alisson:</strong> 48988768443 / alisson2025
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function checkStatus() {
+            const statusDiv = document.getElementById('status');
+            let html = '';
+            
+            // Verificar localStorage
+            if (typeof Storage !== 'undefined') {
+                html += '<span class="success">✅ localStorage disponível</span><br>';
+            } else {
+                html += '<span class="error">❌ localStorage não disponível</span><br>';
+            }
+            
+            // Verificar funcionários
+            const employees = JSON.parse(localStorage.getItem('employees') || '[]');
+            html += `<span class="${employees.length > 0 ? 'success' : 'error'}">👥 ${employees.length} funcionários cadastrados</span><br>`;
+            
+            // Verificar usuário atual
+            const currentUser = localStorage.getItem('currentUser');
+            html += `<span class="${currentUser ? 'success' : 'error'}">👤 Usuário logado: ${currentUser ? JSON.parse(currentUser).name : 'Nenhum'}</span><br>`;
+            
+            statusDiv.innerHTML = html;
+        }
+        
+        function showUsers() {
+            const userListDiv = document.getElementById('userList');
+            const employees = JSON.parse(localStorage.getItem('employees') || '[]');
+            
+            if (employees.length === 0) {
+                userListDiv.innerHTML = '<span class="error">❌ Nenhum usuário encontrado</span>';
+                return;
+            }
+            
+            let html = '<div class="user-list">';
+            employees.forEach(emp => {
+                html += `<strong>${emp.name}</strong> (${emp.role})<br>`;
+                html += `📞 ${emp.phone}<br>`;
+                html += `🔑 ${emp.credentials.username} / ${emp.credentials.password}<br>`;
+                html += `✅ Ativo: ${emp.credentials.active}<br><br>`;
+            });
+            html += '</div>';
+            
+            userListDiv.innerHTML = html;
+        }
+        
+        function testLogin() {
+            const username = document.getElementById('testUsername').value.trim();
+            const password = document.getElementById('testPassword').value.trim();
+            const resultDiv = document.getElementById('testResult');
+            
+            if (!username || !password) {
+                resultDiv.innerHTML = '<span class="error">❌ Preencha usuário e senha</span>';
+                return;
+            }
+            
+            const employees = JSON.parse(localStorage.getItem('employees') || '[]');
+            const authenticatedUser = employees.find(emp => 
+                emp.credentials?.username === username && 
+                emp.credentials?.password === password &&
+                emp.credentials?.active === true
+            );
+            
+            if (authenticatedUser) {
+                resultDiv.innerHTML = `<span class="success">✅ Login bem-sucedido! Usuário: ${authenticatedUser.name}</span>`;
+            } else {
+                resultDiv.innerHTML = '<span class="error">❌ Credenciais inválidas</span>';
+            }
+        }
+        
+        function createUsers() {
+            const defaultEmployees = [
+                {
+                    id: 1,
+                    name: 'Matheus',
+                    phone: '(48) 93300-2321',
+                    email: 'matheus@barbearia.com',
+                    role: 'gerente',
+                    commission: 50.0,
+                    notes: 'Administrador',
+                    credentials: {
+                        username: '48933002321',
+                        password: 'matheus2025',
+                        active: true
+                    },
+                    createdAt: '2024-03-01'
+                },
+                {
+                    id: 2,
+                    name: 'Vitor',
+                    phone: '(48) 99119-9474',
+                    email: 'vitor@barbearia.com',
+                    role: 'gerente',
+                    commission: 50.0,
+                    notes: 'Administrador',
+                    credentials: {
+                        username: '48991199474',
+                        password: 'vitor2025',
+                        active: true
+                    },
+                    createdAt: '2024-03-05'
+                },
+                {
+                    id: 3,
+                    name: 'Marcelo',
+                    phone: '(48) 99620-1178',
+                    email: 'marcelo@barbearia.com',
+                    role: 'gerente',
+                    commission: 50.0,
+                    notes: 'Administrador',
+                    credentials: {
+                        username: '48996201178',
+                        password: 'marcelo2025',
+                        active: true
+                    },
+                    createdAt: '2024-03-10'
+                },
+                {
+                    id: 4,
+                    name: 'Alisson',
+                    phone: '(48) 98876-8443',
+                    email: 'alisson@barbearia.com',
+                    role: 'barbeiro',
+                    commission: 40.0,
+                    notes: 'Barbeiro',
+                    credentials: {
+                        username: '48988768443',
+                        password: 'alisson2025',
+                        active: true
+                    },
+                    createdAt: '2024-04-01'
+                }
+            ];
+            
+            localStorage.setItem('employees', JSON.stringify(defaultEmployees));
+            alert('✅ Usuários recriados com sucesso!');
+            checkStatus();
+            showUsers();
+        }
+        
+        function clearData() {
+            if (confirm('Tem certeza que deseja limpar todos os dados?')) {
+                localStorage.clear();
+                alert('🗑️ Dados limpos!');
+                checkStatus();
+                showUsers();
+            }
+        }
+        
+        // Inicializar ao carregar
+        window.onload = function() {
+            checkStatus();
+            showUsers();
+        };
+    </script>
+</body>
+</html>

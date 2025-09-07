@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('login-form');
     
     if (loginForm) {
-        loginForm.addEventListener('submit', function(event) {
+        loginForm.addEventListener('submit', async function(event) {
             event.preventDefault();
             
             // Obter valores dos campos
@@ -95,18 +95,40 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('employees', JSON.stringify(defaultEmployees));
             }
             
-            // Verificar credenciais
-            const currentEmployees = JSON.parse(localStorage.getItem('employees') || '[]');
-            console.log('Verificando credenciais para:', username);
-            console.log('Total de funcionários:', currentEmployees.length);
+            // Autenticar usuário (com suporte ao Supabase)
+            const authenticatedUser = await authenticateUser(username, password);
             
-            const authenticatedUser = currentEmployees.find(emp => {
-                const match = emp.credentials?.username === username && 
-                             emp.credentials?.password === password &&
-                             emp.credentials?.active === true;
-                console.log(`Verificando ${emp.name}: username=${emp.credentials?.username}, match=${match}`);
-                return match;
-            });
+            console.log('Usuário autenticado:', authenticatedUser ? authenticatedUser.name : 'Nenhum');
+            
+    // Autenticar usuário (com suporte ao Supabase)
+    async function authenticateUser(username, password) {
+        // Tentar autenticação com Supabase primeiro (se disponível)
+        if (window.SupabaseAuth) {
+            try {
+                const result = await window.SupabaseAuth.login(username, password);
+                if (result.success) {
+                    return result.funcionario;
+                }
+            } catch (error) {
+                console.log('Supabase não disponível, usando localStorage:', error);
+            }
+        }
+        
+        // Fallback para localStorage (desenvolvimento local)
+        const currentEmployees = JSON.parse(localStorage.getItem('employees') || '[]');
+        console.log('Verificando credenciais para:', username);
+        console.log('Total de funcionários:', currentEmployees.length);
+        
+        const user = currentEmployees.find(emp => {
+            const match = emp.credentials?.username === username && 
+                         emp.credentials?.password === password &&
+                         emp.credentials?.active === true;
+            console.log(`Verificando ${emp.name}: username=${emp.credentials?.username}, match=${match}`);
+            return match;
+        });
+        
+        return user;
+    }
             
             console.log('Usuário autenticado:', authenticatedUser ? authenticatedUser.name : 'Nenhum');
             
