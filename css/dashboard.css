@@ -1412,6 +1412,52 @@ body {
         box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
         border-right: 1px solid rgba(255, 255, 255, 0.1);
     }
+    
+    /* Modo escuro para desktop - textos pretos e ícones azul-turquesa */
+    body:not(.light-mode) .section-header h2 {
+        color: #000000;
+    }
+    
+    body:not(.light-mode) .section-header h2 i {
+        color: #00CED1;
+    }
+    
+    body:not(.light-mode) .date-display {
+        color: #00CED1;
+    }
+    
+    body:not(.light-mode) .appointment-time {
+        color: #00CED1;
+    }
+    
+    body:not(.light-mode) .appointment-info h4 {
+        color: #000000;
+    }
+    
+    body:not(.light-mode) .appointment-info p {
+        color: #000000;
+    }
+    
+    body:not(.light-mode) .activity-content h4 {
+        color: #000000;
+    }
+    
+    body:not(.light-mode) .activity-content p {
+        color: #000000;
+    }
+    
+    body:not(.light-mode) .activity-time {
+        color: #000000;
+    }
+    
+    body:not(.light-mode) .card-content h3 {
+        color: #000000;
+    }
+    
+    body:not(.light-mode) .metric-value {
+        color: #000000;
+        font-weight: 700;
+    }
 
     .sidebar-header {
         padding: 30px 25px;
