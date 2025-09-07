@@ -163,7 +163,7 @@ body {
 }
 
 .metric-card {
-    background-color: rgba(25, 25, 25, 0.8);
+    background: linear-gradient(135deg, rgba(64, 64, 64, 0.9), rgba(48, 48, 48, 0.95));
     border-radius: 10px;
     padding: 25px;
     box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
@@ -1631,9 +1631,9 @@ body {
         padding: 30px;
         min-height: 140px;
         border-radius: 12px;
-        background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+        background: linear-gradient(135deg, rgba(64, 64, 64, 0.9), rgba(48, 48, 48, 0.95));
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(96, 96, 96, 0.3);
     }
 
     .card-icon {
