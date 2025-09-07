@@ -1455,8 +1455,36 @@ body {
     }
     
     body.light-mode .metric-value {
+           color: #000000;
+           font-weight: 700;
+       }
+       
+       /* Título Dashboard no cabeçalho - modo claro */
+       body.light-mode .header h1 {
+           color: #000000;
+       }
+       
+       body.light-mode .header h1 i {
+           color: #000000;
+       }
+       
+       /* Horários dos agendamentos - modo claro */
+       body.light-mode .appointment-time span {
+           color: #00CED1;
+       }
+    
+    /* Título Dashboard no cabeçalho - modo claro */
+    body.light-mode .header h1 {
         color: #000000;
-        font-weight: 700;
+    }
+    
+    body.light-mode .header h1 i {
+        color: #000000;
+    }
+    
+    /* Horários dos agendamentos - modo claro */
+    body.light-mode .appointment-time span {
+        color: #00CED1;
     }
 
     .sidebar-header {
