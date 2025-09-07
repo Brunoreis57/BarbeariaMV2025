@@ -698,3 +698,12 @@ form {
         font-size: 1.5rem;
     }
 }
+
+/* Light mode styles for header */
+body.light-mode .header h1 {
+    color: #000000;
+}
+
+body.light-mode .header h1 i {
+    color: #000000;
+}
