@@ -947,6 +947,10 @@ body.light-mode .logo h1 {
     color: #333;
 }
 
+body.light-mode .balance-header h2 {
+    color: #333;
+}
+
 body.light-mode .search-input-container input,
 body.light-mode .stat-card,
 body.light-mode .expense-card {
@@ -960,6 +964,8 @@ body.light-mode .search-input-container input::placeholder {
 }
 
 body.light-mode .stat-number,
+body.light-mode .stat-value,
+body.light-mode .balance-amount,
 body.light-mode .expense-info h3 {
     color: #333;
 }
