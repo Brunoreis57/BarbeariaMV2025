@@ -833,25 +833,25 @@ body {
        }
        
        body:not(.light-mode) .card-content h3 {
-           color: #a0a9c0;
+           color: #000000;
        }
        
        body:not(.light-mode) .metric-value {
-           color: #ffffff;
+           color: #000000;
            font-weight: 700;
        }
        
        /* Seções no modo escuro */
        body:not(.light-mode) .section-header h2 {
-           color: #ffffff;
+           color: #000000;
        }
        
        body:not(.light-mode) .section-header h2 i {
-           color: #00d4ff;
+           color: #00CED1;
        }
        
        body:not(.light-mode) .date-display {
-           color: #00d4ff;
+           color: #00CED1;
        }
        
        /* Agendamentos no modo escuro */
@@ -873,15 +873,15 @@ body {
        }
        
        body:not(.light-mode) .appointment-time {
-           color: #00d4ff;
+           color: #00CED1;
        }
        
        body:not(.light-mode) .appointment-info h4 {
-           color: #ffffff;
+           color: #000000;
        }
        
        body:not(.light-mode) .appointment-info p {
-           color: #a0a9c0;
+           color: #000000;
        }
        
        body:not(.light-mode) .service-price {
@@ -899,15 +899,15 @@ body {
        }
        
        body:not(.light-mode) .activity-content h4 {
-           color: #ffffff;
+           color: #000000;
        }
        
        body:not(.light-mode) .activity-content p {
-           color: #a0a9c0;
+           color: #000000;
        }
        
        body:not(.light-mode) .activity-time {
-           color: #6b7280;
+           color: #000000;
        }
       
       /* Sidebar para desktop - DESIGN ELEGANTE */
