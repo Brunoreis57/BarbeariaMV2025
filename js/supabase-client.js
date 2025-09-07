@@ -8,8 +8,8 @@
 
 // Configurações do Supabase
 const SUPABASE_CONFIG = {
-    url: 'SUA_URL_DO_SUPABASE', // Substitua pela URL do seu projeto
-    anonKey: 'SUA_CHAVE_ANON_DO_SUPABASE' // Substitua pela chave anon do seu projeto
+    url: 'https://pukpemqxegjnimfjhbfd.supabase.co', // Substitua pela URL do seu projeto
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB1a3BlbXF4ZWdqbmltZmpoYmZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyNzUzODEsImV4cCI6MjA3Mjg1MTM4MX0.1Qz88NDo8us9md-7tnNFcuUG088itgXtVL8wxLmjCUw' // Substitua pela chave anon do seu projeto
 };
 
 // Inicializar cliente Supabase
