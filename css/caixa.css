@@ -953,7 +953,8 @@ body.light-mode .balance-header h2 {
 
 body.light-mode .search-input-container input,
 body.light-mode .stat-card,
-body.light-mode .expense-card {
+body.light-mode .expense-card,
+body.light-mode .expenses-table-container {
     background: white;
     border-color: #dee2e6;
     color: #333;
@@ -966,7 +967,8 @@ body.light-mode .search-input-container input::placeholder {
 body.light-mode .stat-number,
 body.light-mode .stat-value,
 body.light-mode .balance-amount,
-body.light-mode .expense-info h3 {
+body.light-mode .expense-info h3,
+body.light-mode .expenses-table td {
     color: #333;
 }
 
@@ -997,6 +999,11 @@ body.light-mode .modal-header {
 }
 
 body.light-mode .modal-header h2 {
+    color: #333;
+}
+
+body.light-mode .expenses-table th {
+    background: linear-gradient(135deg, #e9ecef, #dee2e6);
     color: #333;
 }
 
