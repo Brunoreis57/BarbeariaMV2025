@@ -1,43 +1,73 @@
 -- =====================================================
--- INSERÇÃO DOS FUNCIONÁRIOS INICIAIS
+-- INSERÇÃO DOS FUNCIONÁRIOS INICIAIS (COM VERIFICAÇÃO)
 -- Sistema de Gestão para Barbearia MV 2025
 -- =====================================================
 
--- Inserir funcionários na tabela funcionarios
-INSERT INTO funcionarios (nome, telefone, cargo, percentual_comissao, ativo) VALUES
-('Matheus', '48933002321', 'gerente', 15.00, true),
-('Vitor', '48991199474', 'gerente', 15.00, true),
-('Marcelo', '48996201178', 'gerente', 15.00, true),
-('Alisson', '48988768443', 'barbeiro', 50.00, true);
+-- Inserir funcionários apenas se não existirem
+INSERT INTO funcionarios (nome, telefone, cargo, percentual_comissao, ativo) 
+SELECT 'Matheus', '48933002321', 'gerente', 15.00, true
+WHERE NOT EXISTS (SELECT 1 FROM funcionarios WHERE telefone = '48933002321');
 
--- Inserir credenciais usando a função create_funcionario_credentials
+INSERT INTO funcionarios (nome, telefone, cargo, percentual_comissao, ativo) 
+SELECT 'Vitor', '48991199474', 'gerente', 15.00, true
+WHERE NOT EXISTS (SELECT 1 FROM funcionarios WHERE telefone = '48991199474');
+
+INSERT INTO funcionarios (nome, telefone, cargo, percentual_comissao, ativo) 
+SELECT 'Marcelo', '48996201178', 'gerente', 15.00, true
+WHERE NOT EXISTS (SELECT 1 FROM funcionarios WHERE telefone = '48996201178');
+
+INSERT INTO funcionarios (nome, telefone, cargo, percentual_comissao, ativo) 
+SELECT 'Alisson', '48988768443', 'barbeiro', 50.00, true
+WHERE NOT EXISTS (SELECT 1 FROM funcionarios WHERE telefone = '48988768443');
+
+-- Inserir credenciais apenas se não existirem
 -- Matheus
-SELECT create_funcionario_credentials(
-    (SELECT id FROM funcionarios WHERE telefone = '48933002321'),
-    '48933002321',
-    'matheus2025'
-);
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM funcionario_credenciais WHERE usuario = '48933002321') THEN
+        PERFORM create_funcionario_credentials(
+            (SELECT id FROM funcionarios WHERE telefone = '48933002321'),
+            '48933002321',
+            'matheus2025'
+        );
+    END IF;
+END $$;
 
 -- Vitor
-SELECT create_funcionario_credentials(
-    (SELECT id FROM funcionarios WHERE telefone = '48991199474'),
-    '48991199474',
-    'vitor2025'
-);
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM funcionario_credenciais WHERE usuario = '48991199474') THEN
+        PERFORM create_funcionario_credentials(
+            (SELECT id FROM funcionarios WHERE telefone = '48991199474'),
+            '48991199474',
+            'vitor2025'
+        );
+    END IF;
+END $$;
 
 -- Marcelo
-SELECT create_funcionario_credentials(
-    (SELECT id FROM funcionarios WHERE telefone = '48996201178'),
-    '48996201178',
-    'marcelo2025'
-);
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM funcionario_credenciais WHERE usuario = '48996201178') THEN
+        PERFORM create_funcionario_credentials(
+            (SELECT id FROM funcionarios WHERE telefone = '48996201178'),
+            '48996201178',
+            'marcelo2025'
+        );
+    END IF;
+END $$;
 
 -- Alisson
-SELECT create_funcionario_credentials(
-    (SELECT id FROM funcionarios WHERE telefone = '48988768443'),
-    '48988768443',
-    'alisson2025'
-);
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM funcionario_credenciais WHERE usuario = '48988768443') THEN
+        PERFORM create_funcionario_credentials(
+            (SELECT id FROM funcionarios WHERE telefone = '48988768443'),
+            '48988768443',
+            'alisson2025'
+        );
+    END IF;
+END $$;
 
 -- Verificar se os dados foram inseridos corretamente
 SELECT 
