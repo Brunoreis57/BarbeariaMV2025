@@ -833,54 +833,54 @@ body {
        }
        
        body:not(.light-mode) .card-content h3 {
-           color: #000000;
+           color: rgba(255, 255, 255, 0.8);
        }
        
        body:not(.light-mode) .metric-value {
-           color: #000000;
+           color: #ffffff;
            font-weight: 700;
        }
        
-       /* Seções no modo escuro */
-       body:not(.light-mode) .section-header h2 {
+       /* Seções no modo claro */
+       body.light-mode .section-header h2 {
            color: #000000;
        }
        
-       body:not(.light-mode) .section-header h2 i {
+       body.light-mode .section-header h2 i {
            color: #00CED1;
        }
        
-       body:not(.light-mode) .date-display {
+       body.light-mode .date-display {
            color: #00CED1;
        }
        
-       /* Agendamentos no modo escuro */
-       body:not(.light-mode) .appointments-container,
-       body:not(.light-mode) .activities-container {
-           background: rgba(26, 26, 46, 0.8);
-           border: 1px solid rgba(255, 255, 255, 0.1);
-           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+       /* Agendamentos no modo claro */
+       body.light-mode .appointments-container,
+       body.light-mode .activities-container {
+           background: rgba(255, 255, 255, 0.95);
+           border: 1px solid rgba(0, 0, 0, 0.1);
+           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
        }
        
-       body:not(.light-mode) .appointment-item {
-           background: rgba(22, 33, 62, 0.6);
-           border-left: 4px solid #00d4ff;
+       body.light-mode .appointment-item {
+           background: rgba(255, 255, 255, 0.9);
+           border-left: 4px solid #00CED1;
        }
        
-       body:not(.light-mode) .appointment-item:hover {
-           background: rgba(22, 33, 62, 0.8);
-           box-shadow: 0 4px 20px rgba(0, 212, 255, 0.2);
+       body.light-mode .appointment-item:hover {
+           background: rgba(255, 255, 255, 1);
+           box-shadow: 0 4px 20px rgba(0, 206, 209, 0.2);
        }
        
-       body:not(.light-mode) .appointment-time {
+       body.light-mode .appointment-time {
            color: #00CED1;
        }
        
-       body:not(.light-mode) .appointment-info h4 {
+       body.light-mode .appointment-info h4 {
            color: #000000;
        }
        
-       body:not(.light-mode) .appointment-info p {
+       body.light-mode .appointment-info p {
            color: #000000;
        }
        
@@ -889,24 +889,24 @@ body {
            font-weight: 600;
        }
        
-       /* Atividades no modo escuro */
-       body:not(.light-mode) .activity-item {
-           background: rgba(22, 33, 62, 0.6);
+       /* Atividades no modo claro */
+       body.light-mode .activity-item {
+           background: rgba(255, 255, 255, 0.9);
        }
        
-       body:not(.light-mode) .activity-item:hover {
-           background: rgba(22, 33, 62, 0.8);
+       body.light-mode .activity-item:hover {
+           background: rgba(255, 255, 255, 1);
        }
        
-       body:not(.light-mode) .activity-content h4 {
+       body.light-mode .activity-content h4 {
            color: #000000;
        }
        
-       body:not(.light-mode) .activity-content p {
+       body.light-mode .activity-content p {
            color: #000000;
        }
        
-       body:not(.light-mode) .activity-time {
+       body.light-mode .activity-time {
            color: #000000;
        }
       
@@ -1413,48 +1413,48 @@ body {
         border-right: 1px solid rgba(255, 255, 255, 0.1);
     }
     
-    /* Modo escuro para desktop - textos pretos e ícones azul-turquesa */
-    body:not(.light-mode) .section-header h2 {
+    /* Modo claro para desktop - textos pretos e ícones azul-turquesa */
+    body.light-mode .section-header h2 {
         color: #000000;
     }
     
-    body:not(.light-mode) .section-header h2 i {
+    body.light-mode .section-header h2 i {
         color: #00CED1;
     }
     
-    body:not(.light-mode) .date-display {
+    body.light-mode .date-display {
         color: #00CED1;
     }
     
-    body:not(.light-mode) .appointment-time {
+    body.light-mode .appointment-time {
         color: #00CED1;
     }
     
-    body:not(.light-mode) .appointment-info h4 {
+    body.light-mode .appointment-info h4 {
         color: #000000;
     }
     
-    body:not(.light-mode) .appointment-info p {
+    body.light-mode .appointment-info p {
         color: #000000;
     }
     
-    body:not(.light-mode) .activity-content h4 {
+    body.light-mode .activity-content h4 {
         color: #000000;
     }
     
-    body:not(.light-mode) .activity-content p {
+    body.light-mode .activity-content p {
         color: #000000;
     }
     
-    body:not(.light-mode) .activity-time {
+    body.light-mode .activity-time {
         color: #000000;
     }
     
-    body:not(.light-mode) .card-content h3 {
+    body.light-mode .card-content h3 {
         color: #000000;
     }
     
-    body:not(.light-mode) .metric-value {
+    body.light-mode .metric-value {
         color: #000000;
         font-weight: 700;
     }
