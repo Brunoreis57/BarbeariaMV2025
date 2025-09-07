@@ -28,7 +28,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="agendamentos.html" class="nav-link">
+                        <a href="agenda.html" class="nav-link">
                             <i class="fas fa-calendar-alt"></i>
                             <span>Agendamentos</span>
                         </a>
@@ -60,6 +60,10 @@
                 </ul>
             </nav>
             <div class="sidebar-footer">
+                <button class="theme-toggle-btn" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                    <span>Modo Escuro</span>
+                </button>
                 <a href="menu.html" class="logout-btn">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Voltar ao Menu</span>
@@ -78,6 +82,7 @@
             </div>
         </header>
 
+        <div class="dashboard-section">
         <main class="main-content">
             <!-- Cards de Métricas -->
             <section class="metrics-section">
@@ -248,9 +253,11 @@
                 </div>
             </section>
         </main>
+        </div>
         </div> <!-- Fecha main-wrapper -->
     </div>
 
+    <script src="js/data-sync.js"></script>
     <script src="js/theme.js"></script>
     <script src="js/dashboard.js"></script>
 </body>

@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const password = document.getElementById('password').value.trim();
             const remember = document.getElementById('remember').checked;
             
+            console.log('Tentativa de login:', { username, password: '***', remember });
+            
             // Validar campos
             if (!username) {
                 showError('Por favor, insira seu nome de usuário');
@@ -21,8 +23,102 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Simulação de autenticação (será substituída pela integração com o banco de dados)
-            if (username === 'admin' && password === 'admin123') {
+            // Autenticação com funcionários cadastrados
+            const employees = JSON.parse(localStorage.getItem('employees') || '[]');
+            console.log('Funcionários no localStorage:', employees.length);
+            
+            // Se não há funcionários, criar os padrão
+            if (employees.length === 0) {
+                console.log('Criando funcionários padrão...');
+                const defaultEmployees = [
+                    {
+                        id: 1,
+                        name: 'Matheus',
+                        phone: '(48) 93300-2321',
+                        email: 'matheus@barbearia.com',
+                        role: 'gerente',
+                        commission: 50.0,
+                        notes: 'Administrador',
+                        credentials: {
+                            username: '48933002321',
+                            password: 'matheus2025',
+                            active: true
+                        },
+                        createdAt: '2024-03-01'
+                    },
+                    {
+                        id: 2,
+                        name: 'Vitor',
+                        phone: '(48) 99119-9474',
+                        email: 'vitor@barbearia.com',
+                        role: 'gerente',
+                        commission: 50.0,
+                        notes: 'Administrador',
+                        credentials: {
+                            username: '48991199474',
+                            password: 'vitor2025',
+                            active: true
+                        },
+                        createdAt: '2024-03-05'
+                    },
+                    {
+                        id: 3,
+                        name: 'Marcelo',
+                        phone: '(48) 99620-1178',
+                        email: 'marcelo@barbearia.com',
+                        role: 'gerente',
+                        commission: 50.0,
+                        notes: 'Administrador',
+                        credentials: {
+                            username: '48996201178',
+                            password: 'marcelo2025',
+                            active: true
+                        },
+                        createdAt: '2024-03-10'
+                    },
+                    {
+                        id: 4,
+                        name: 'Alisson',
+                        phone: '(48) 98876-8443',
+                        email: 'alisson@barbearia.com',
+                        role: 'barbeiro',
+                        commission: 40.0,
+                        notes: 'Barbeiro',
+                        credentials: {
+                            username: '48988768443',
+                            password: 'alisson2025',
+                            active: true
+                        },
+                        createdAt: '2024-04-01'
+                    }
+                ];
+                localStorage.setItem('employees', JSON.stringify(defaultEmployees));
+            }
+            
+            // Verificar credenciais
+            const currentEmployees = JSON.parse(localStorage.getItem('employees') || '[]');
+            console.log('Verificando credenciais para:', username);
+            console.log('Total de funcionários:', currentEmployees.length);
+            
+            const authenticatedUser = currentEmployees.find(emp => {
+                const match = emp.credentials?.username === username && 
+                             emp.credentials?.password === password &&
+                             emp.credentials?.active === true;
+                console.log(`Verificando ${emp.name}: username=${emp.credentials?.username}, match=${match}`);
+                return match;
+            });
+            
+            console.log('Usuário autenticado:', authenticatedUser ? authenticatedUser.name : 'Nenhum');
+            
+            if (authenticatedUser) {
+                // Salvar dados do usuário logado
+                localStorage.setItem('currentUser', JSON.stringify({
+                    id: authenticatedUser.id,
+                    name: authenticatedUser.name,
+                    role: authenticatedUser.role,
+                    loginTime: new Date().toISOString()
+                }));
+                
                 // Salvar no localStorage se a opção "lembrar-me" estiver marcada
                 if (remember) {
                     localStorage.setItem('rememberedUser', username);
@@ -30,14 +126,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     localStorage.removeItem('rememberedUser');
                 }
                 
-                // Redirecionar para a página principal (a ser criada)
-                showSuccess('Login realizado com sucesso! Redirecionando...');
+                // Redirecionar para o menu principal
+                showSuccess(`Bem-vindo, ${authenticatedUser.name}! Redirecionando...`);
                 setTimeout(() => {
-                    // Aqui será o redirecionamento para a página principal
-                    alert('Redirecionamento para a página principal (a ser implementada)');
+                    window.location.href = 'menu.html';
                 }, 1500);
             } else {
-                showError('Nome de usuário ou senha incorretos');
+                showError('Número de telefone ou senha incorretos');
             }
         });
     }
@@ -120,3 +215,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // Adicionar ao head
     document.head.appendChild(style);
 });
+
+// Função para alternar visibilidade da senha
+function togglePasswordVisibility() {
+    const passwordField = document.getElementById('password');
+    const toggleIcon = document.getElementById('togglePassword');
+    
+    if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        toggleIcon.classList.remove('fa-eye');
+        toggleIcon.classList.add('fa-eye-slash');
+    } else {
+        passwordField.type = 'password';
+        toggleIcon.classList.remove('fa-eye-slash');
+        toggleIcon.classList.add('fa-eye');
+    }
+}

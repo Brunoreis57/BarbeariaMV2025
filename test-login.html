@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Login - Debug</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #1a1a1a; color: #fff; }
+        .debug-info { background: #2a2a2a; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .credentials { background: #0a4a0a; padding: 10px; margin: 5px 0; border-radius: 3px; }
+        button { background: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin: 5px; }
+        button:hover { background: #45a049; }
+        input { padding: 8px; margin: 5px; border-radius: 3px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>Debug do Sistema de Login</h1>
+    
+    <div class="debug-info">
+        <h3>Usuários Cadastrados:</h3>
+        <div class="credentials">
+            <strong>Matheus (Gerente):</strong><br>
+            Usuário: 48933002321<br>
+            Senha: matheus2025
+        </div>
+        <div class="credentials">
+            <strong>Vitor (Gerente):</strong><br>
+            Usuário: 48991199474<br>
+            Senha: vitor2025
+        </div>
+        <div class="credentials">
+            <strong>Marcelo (Gerente):</strong><br>
+            Usuário: 48996201178<br>
+            Senha: marcelo2025
+        </div>
+        <div class="credentials">
+            <strong>Alisson (Barbeiro):</strong><br>
+            Usuário: 48988768443<br>
+            Senha: alisson2025
+        </div>
+    </div>
+    
+    <div class="debug-info">
+        <h3>Teste de Login:</h3>
+        <input type="text" id="testUser" placeholder="Usuário" value="48933002321">
+        <input type="password" id="testPass" placeholder="Senha" value="matheus2025">
+        <button onclick="testLogin()">Testar Login</button>
+        <button onclick="clearStorage()">Limpar localStorage</button>
+        <button onclick="showStorage()">Mostrar localStorage</button>
+    </div>
+    
+    <div class="debug-info">
+        <h3>Resultado:</h3>
+        <div id="result"></div>
+    </div>
+    
+    <div class="debug-info">
+        <h3>localStorage:</h3>
+        <div id="storage"></div>
+    </div>
+    
+    <script>
+        function testLogin() {
+            const username = document.getElementById('testUser').value;
+            const password = document.getElementById('testPass').value;
+            
+            // Criar usuários padrão se não existirem
+            let employees = JSON.parse(localStorage.getItem('employees') || '[]');
+            
+            if (employees.length === 0) {
+                const defaultEmployees = [
+                    {
+                        id: 1,
+                        name: 'Matheus',
+                        phone: '(48) 93300-2321',
+                        email: 'matheus@barbearia.com',
+                        role: 'gerente',
+                        commission: 50.0,
+                        notes: 'Administrador',
+                        credentials: {
+                            username: '48933002321',
+                            password: 'matheus2025',
+                            active: true
+                        },
+                        createdAt: '2024-03-01'
+                    },
+                    {
+                        id: 2,
+                        name: 'Vitor',
+                        phone: '(48) 99119-9474',
+                        email: 'vitor@barbearia.com',
+                        role: 'gerente',
+                        commission: 50.0,
+                        notes: 'Administrador',
+                        credentials: {
+                            username: '48991199474',
+                            password: 'vitor2025',
+                            active: true
+                        },
+                        createdAt: '2024-03-05'
+                    },
+                    {
+                        id: 3,
+                        name: 'Marcelo',
+                        phone: '(48) 99620-1178',
+                        email: 'marcelo@barbearia.com',
+                        role: 'gerente',
+                        commission: 50.0,
+                        notes: 'Administrador',
+                        credentials: {
+                            username: '48996201178',
+                            password: 'marcelo2025',
+                            active: true
+                        },
+                        createdAt: '2024-03-10'
+                    },
+                    {
+                        id: 4,
+                        name: 'Alisson',
+                        phone: '(48) 98876-8443',
+                        email: 'alisson@barbearia.com',
+                        role: 'barbeiro',
+                        commission: 40.0,
+                        notes: 'Barbeiro',
+                        credentials: {
+                            username: '48988768443',
+                            password: 'alisson2025',
+                            active: true
+                        },
+                        createdAt: '2024-04-01'
+                    }
+                ];
+                localStorage.setItem('employees', JSON.stringify(defaultEmployees));
+                employees = defaultEmployees;
+            }
+            
+            // Verificar credenciais
+            const authenticatedUser = employees.find(emp => 
+                emp.credentials?.username === username && 
+                emp.credentials?.password === password &&
+                emp.credentials?.active === true
+            );
+            
+            const resultDiv = document.getElementById('result');
+            if (authenticatedUser) {
+                resultDiv.innerHTML = `<div style="color: #4CAF50;">✅ Login bem-sucedido!<br>Usuário: ${authenticatedUser.name}<br>Cargo: ${authenticatedUser.role}</div>`;
+            } else {
+                resultDiv.innerHTML = `<div style="color: #f44336;">❌ Login falhou!<br>Usuário: ${username}<br>Senha: ${password}</div>`;
+            }
+            
+            showStorage();
+        }
+        
+        function clearStorage() {
+            localStorage.removeItem('employees');
+            localStorage.removeItem('currentUser');
+            document.getElementById('result').innerHTML = 'localStorage limpo!';
+            showStorage();
+        }
+        
+        function showStorage() {
+            const employees = localStorage.getItem('employees');
+            const currentUser = localStorage.getItem('currentUser');
+            
+            let html = '';
+            if (employees) {
+                const emp = JSON.parse(employees);
+                html += `<strong>Funcionários (${emp.length}):</strong><br>`;
+                emp.forEach(e => {
+                    html += `- ${e.name} (${e.credentials?.username}) - Ativo: ${e.credentials?.active}<br>`;
+                });
+            } else {
+                html += '<strong>Nenhum funcionário no localStorage</strong><br>';
+            }
+            
+            if (currentUser) {
+                const user = JSON.parse(currentUser);
+                html += `<br><strong>Usuário Logado:</strong> ${user.name} (${user.role})`;
+            }
+            
+            document.getElementById('storage').innerHTML = html;
+        }
+        
+        // Mostrar storage ao carregar
+        window.onload = function() {
+            showStorage();
+        }
+    </script>
+</body>
+</html>

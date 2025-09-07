@@ -1,7 +1,212 @@
 // Relatórios - JavaScript
 
-// Dados simulados para diferentes períodos
-const reportData = {
+// Função para calcular dados reais dos relatórios
+function calculateReportData() {
+    const today = new Date();
+    const todayStr = today.toISOString().split('T')[0];
+    
+    return {
+        daily: calculateDailyData(todayStr),
+        weekly: calculateWeeklyData(today),
+        monthly: calculateMonthlyData(today),
+        yearly: calculateYearlyData(today)
+    };
+}
+
+// Calcular dados diários
+function calculateDailyData(dateStr) {
+    const dailyData = JSON.parse(localStorage.getItem('dailyData') || '{}');
+    const todayData = dailyData[dateStr] || { profit: 0, cuts: 0, services: [], payments: {} };
+    
+    const payments = calculatePaymentBreakdown(todayData.payments || {});
+    const commission = todayData.profit * 0.3; // 30% de comissão
+    
+    return {
+        period: `Hoje - ${new Date(dateStr).toLocaleDateString('pt-BR')}`,
+        metrics: {
+            revenue: todayData.profit,
+            cuts: todayData.cuts,
+            commission: commission,
+            profit: todayData.profit - commission
+        },
+        changes: {
+            revenue: 0, // Calcular comparação com dia anterior
+            cuts: 0,
+            commission: 0,
+            profit: 0
+        },
+        payments: payments
+    };
+}
+
+// Calcular dados semanais
+function calculateWeeklyData(currentDate) {
+    const weekStart = new Date(currentDate);
+    weekStart.setDate(currentDate.getDate() - currentDate.getDay());
+    
+    let totalRevenue = 0, totalCuts = 0, totalPayments = {};
+    
+    for (let i = 0; i < 7; i++) {
+        const date = new Date(weekStart);
+        date.setDate(weekStart.getDate() + i);
+        const dateStr = date.toISOString().split('T')[0];
+        
+        const dailyData = JSON.parse(localStorage.getItem('dailyData') || '{}');
+        const dayData = dailyData[dateStr] || { profit: 0, cuts: 0, payments: {} };
+        
+        totalRevenue += dayData.profit;
+        totalCuts += dayData.cuts;
+        
+        // Somar pagamentos
+        Object.keys(dayData.payments || {}).forEach(method => {
+            totalPayments[method] = (totalPayments[method] || 0) + dayData.payments[method];
+        });
+    }
+    
+    const payments = calculatePaymentBreakdown(totalPayments);
+    const commission = totalRevenue * 0.3;
+    
+    return {
+        period: `Esta Semana - ${weekStart.toLocaleDateString('pt-BR')} a ${new Date(weekStart.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString('pt-BR')}`,
+        metrics: {
+            revenue: totalRevenue,
+            cuts: totalCuts,
+            commission: commission,
+            profit: totalRevenue - commission
+        },
+        changes: {
+            revenue: 0,
+            cuts: 0,
+            commission: 0,
+            profit: 0
+        },
+        payments: payments
+    };
+}
+
+// Calcular dados mensais
+function calculateMonthlyData(currentDate) {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    const monthStart = new Date(year, month, 1);
+    const monthEnd = new Date(year, month + 1, 0);
+    
+    let totalRevenue = 0, totalCuts = 0, totalPayments = {};
+    
+    for (let d = new Date(monthStart); d <= monthEnd; d.setDate(d.getDate() + 1)) {
+        const dateStr = d.toISOString().split('T')[0];
+        const dailyData = JSON.parse(localStorage.getItem('dailyData') || '{}');
+        const dayData = dailyData[dateStr] || { profit: 0, cuts: 0, payments: {} };
+        
+        totalRevenue += dayData.profit;
+        totalCuts += dayData.cuts;
+        
+        Object.keys(dayData.payments || {}).forEach(method => {
+            totalPayments[method] = (totalPayments[method] || 0) + dayData.payments[method];
+        });
+    }
+    
+    const payments = calculatePaymentBreakdown(totalPayments);
+    const commission = totalRevenue * 0.3;
+    
+    return {
+        period: `${monthStart.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}`,
+        metrics: {
+            revenue: totalRevenue,
+            cuts: totalCuts,
+            commission: commission,
+            profit: totalRevenue - commission
+        },
+        changes: {
+            revenue: 0,
+            cuts: 0,
+            commission: 0,
+            profit: 0
+        },
+        payments: payments
+    };
+}
+
+// Calcular dados anuais
+function calculateYearlyData(currentDate) {
+    const year = currentDate.getFullYear();
+    let totalRevenue = 0, totalCuts = 0, totalPayments = {};
+    
+    for (let month = 0; month < 12; month++) {
+        const monthStart = new Date(year, month, 1);
+        const monthEnd = new Date(year, month + 1, 0);
+        
+        for (let d = new Date(monthStart); d <= monthEnd; d.setDate(d.getDate() + 1)) {
+            const dateStr = d.toISOString().split('T')[0];
+            const dailyData = JSON.parse(localStorage.getItem('dailyData') || '{}');
+            const dayData = dailyData[dateStr] || { profit: 0, cuts: 0, payments: {} };
+            
+            totalRevenue += dayData.profit;
+            totalCuts += dayData.cuts;
+            
+            Object.keys(dayData.payments || {}).forEach(method => {
+                totalPayments[method] = (totalPayments[method] || 0) + dayData.payments[method];
+            });
+        }
+    }
+    
+    const payments = calculatePaymentBreakdown(totalPayments);
+    const commission = totalRevenue * 0.3;
+    
+    return {
+        period: `Ano ${year}`,
+        metrics: {
+            revenue: totalRevenue,
+            cuts: totalCuts,
+            commission: commission,
+            profit: totalRevenue - commission
+        },
+        changes: {
+            revenue: 0,
+            cuts: 0,
+            commission: 0,
+            profit: 0
+        },
+        payments: payments
+    };
+}
+
+// Calcular breakdown de pagamentos
+function calculatePaymentBreakdown(payments) {
+    const total = Object.values(payments).reduce((sum, amount) => sum + amount, 0);
+    
+    if (total === 0) {
+        return {
+            cash: { amount: 0, percentage: 0, transactions: 0 },
+            pix: { amount: 0, percentage: 0, transactions: 0 },
+            card: { amount: 0, percentage: 0, transactions: 0 }
+        };
+    }
+    
+    return {
+        cash: {
+            amount: payments.cash || 0,
+            percentage: Math.round(((payments.cash || 0) / total) * 100),
+            transactions: Math.floor((payments.cash || 0) / 25) // Estimativa baseada em valor médio
+        },
+        pix: {
+            amount: payments.pix || 0,
+            percentage: Math.round(((payments.pix || 0) / total) * 100),
+            transactions: Math.floor((payments.pix || 0) / 25)
+        },
+        card: {
+            amount: payments.card || 0,
+            percentage: Math.round(((payments.card || 0) / total) * 100),
+            transactions: Math.floor((payments.card || 0) / 25)
+        }
+    };
+}
+
+// Dados dos relatórios (agora calculados dinamicamente)
+let reportData = calculateReportData();
+
+// Dados simulados mantidos como fallback
+const fallbackReportData = {
     daily: {
         period: 'Hoje - 15/01/2025',
         metrics: {
@@ -103,6 +308,8 @@ function formatNumber(value) {
 
 // Função para atualizar os dados na tela
 function updateReportData(period) {
+    // Recalcular dados antes de exibir
+    reportData = calculateReportData();
     const data = reportData[period];
     
     // Atualizar período
@@ -308,6 +515,9 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log(`Ano selecionado: ${currentYear}`);
         });
     }
+    
+    // Atualizar dados dos relatórios com dados reais
+    reportData = calculateReportData();
     
     // Carregar dados iniciais
     updateReportData(currentPeriod);

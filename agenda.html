@@ -95,6 +95,7 @@
             </div>
         </header>
 
+        <div class="agenda-section">
         <!-- Cards de Ação -->
         <section class="action-cards">
             <div class="card-container">
@@ -145,6 +146,7 @@
                 <!-- Conteúdo será gerado dinamicamente -->
             </div>
         </section>
+        </div>
     </div>
 
     <!-- Modal para Agendar -->
@@ -253,10 +255,7 @@
                             <option value="barba">Barba</option>
                             <option value="corte-barba">Corte + Barba</option>
                         </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="cutPrice">Valor (R$):</label>
-                        <input type="number" id="cutPrice" step="0.01" required>
+                        <div id="servicePrice" class="service-price-display"></div>
                     </div>
                     <div class="modal-actions">
                         <button type="button" class="btn-cancel" onclick="closeModal('cutModal')">Cancelar</button>
@@ -274,21 +273,24 @@
                 <h3>Finalizar Corte</h3>
                 <span class="close" onclick="closeModal('finishCutModal')">&times;</span>
             </div>
-            <form id="finishCutForm">
-                <div class="form-group">
-                    <label>Cliente:</label>
-                    <span id="finishClientName" class="client-display"></span>
-                </div>
-                
-                <div class="form-group">
-                    <label>Serviço:</label>
-                    <span id="finishServiceName" class="service-display"></span>
-                </div>
-                
-                <div class="form-group">
-                    <label>Valor:</label>
-                    <span id="finishServicePrice" class="price-display"></span>
-                </div>
+            <div class="modal-body">
+                <form id="finishCutForm">
+                    <div class="info-section">
+                        <div class="form-group">
+                            <label>Cliente:</label>
+                            <span id="finishClientName" class="client-display"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Serviço:</label>
+                            <span id="finishServiceName" class="service-display"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Valor:</label>
+                            <span id="finishServicePrice" class="price-display"></span>
+                        </div>
+                    </div>
                 
                 <div class="form-group">
                     <label class="checkbox-label">
@@ -311,19 +313,28 @@
                 </div>
                 
                 <div class="form-group">
+                    <label for="cutEmployee">Funcionário Responsável:</label>
+                    <select id="cutEmployee" required>
+                        <option value="">Selecione o funcionário...</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
                     <label for="finishNotes">Observações (opcional):</label>
                     <textarea id="finishNotes" rows="3" placeholder="Observações sobre o atendimento..."></textarea>
                 </div>
                 
-                <div class="form-actions">
-                    <button type="button" class="btn-secondary" onclick="closeModal('finishCutModal')">Cancelar</button>
-                    <button type="submit" class="btn-primary">Finalizar e Salvar</button>
-                </div>
-            </form>
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="closeModal('finishCutModal')">Cancelar</button>
+                        <button type="submit" class="btn-primary">Finalizar e Salvar</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
     <!-- Scripts -->
+    <script src="js/data-sync.js"></script>
     <script src="js/theme.js"></script>
     <script src="js/agenda.js"></script>
 </body>

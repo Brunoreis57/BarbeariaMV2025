@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Login Simples</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #1a1a1a; color: #fff; }
+        input, button { padding: 10px; margin: 5px; display: block; }
+        #result { margin-top: 20px; padding: 10px; background: #2a2a2a; }
+    </style>
+</head>
+<body>
+    <h1>Teste de Login Direto</h1>
+    <input type="text" id="user" placeholder="Usuário" value="48933002321">
+    <input type="password" id="pass" placeholder="Senha" value="matheus2025">
+    <button onclick="testDirectLogin()">Testar Login</button>
+    <button onclick="showLocalStorage()">Mostrar localStorage</button>
+    <button onclick="clearAll()">Limpar Tudo</button>
+    
+    <div id="result"></div>
+    
+    <script>
+        function testDirectLogin() {
+            const username = document.getElementById('user').value;
+            const password = document.getElementById('pass').value;
+            
+            console.log('=== INÍCIO DO TESTE ===');
+            console.log('Username:', username);
+            console.log('Password:', password);
+            
+            // Verificar se há funcionários
+            let employees = JSON.parse(localStorage.getItem('employees') || '[]');
+            console.log('Funcionários existentes:', employees.length);
+            
+            // Se não há funcionários, criar
+            if (employees.length === 0) {
+                console.log('Criando funcionários padrão...');
+                const defaultEmployees = [
+                    {
+                        id: 1,
+                        name: 'Matheus',
+                        credentials: {
+                            username: '48933002321',
+                            password: 'matheus2025',
+                            active: true
+                        }
+                    },
+                    {
+                        id: 2,
+                        name: 'Vitor',
+                        credentials: {
+                            username: '48991199474',
+                            password: 'vitor2025',
+                            active: true
+                        }
+                    }
+                ];
+                localStorage.setItem('employees', JSON.stringify(defaultEmployees));
+                employees = defaultEmployees;
+                console.log('Funcionários criados:', employees.length);
+            }
+            
+            // Testar autenticação
+            console.log('Testando autenticação...');
+            employees.forEach((emp, index) => {
+                console.log(`Funcionário ${index + 1}:`, {
+                    name: emp.name,
+                    username: emp.credentials?.username,
+                    password: emp.credentials?.password,
+                    active: emp.credentials?.active
+                });
+            });
+            
+            const authenticatedUser = employees.find(emp => {
+                const usernameMatch = emp.credentials?.username === username;
+                const passwordMatch = emp.credentials?.password === password;
+                const activeMatch = emp.credentials?.active === true;
+                
+                console.log(`Verificando ${emp.name}:`, {
+                    usernameMatch,
+                    passwordMatch,
+                    activeMatch,
+                    overall: usernameMatch && passwordMatch && activeMatch
+                });
+                
+                return usernameMatch && passwordMatch && activeMatch;
+            });
+            
+            const result = document.getElementById('result');
+            if (authenticatedUser) {
+                result.innerHTML = `<div style="color: green;">✅ LOGIN SUCESSO!<br>Usuário: ${authenticatedUser.name}</div>`;
+                console.log('LOGIN SUCESSO:', authenticatedUser.name);
+            } else {
+                result.innerHTML = `<div style="color: red;">❌ LOGIN FALHOU!<br>Username: ${username}<br>Password: ${password}</div>`;
+                console.log('LOGIN FALHOU');
+            }
+            
+            console.log('=== FIM DO TESTE ===');
+        }
+        
+        function showLocalStorage() {
+            const employees = localStorage.getItem('employees');
+            console.log('localStorage employees:', employees);
+            
+            if (employees) {
+                const parsed = JSON.parse(employees);
+                console.log('Parsed employees:', parsed);
+            }
+        }
+        
+        function clearAll() {
+            localStorage.clear();
+            console.log('localStorage limpo');
+            document.getElementById('result').innerHTML = 'localStorage limpo!';
+        }
+        
+        // Auto-mostrar localStorage ao carregar
+        window.onload = function() {
+            showLocalStorage();
+        }
+    </script>
+</body>
+</html>

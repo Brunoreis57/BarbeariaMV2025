@@ -393,12 +393,31 @@ function handleScheduleSubmit() {
         addNewClient(clientName);
     }
     
+    // Buscar preço do serviço
+    const serviceMapping = {
+        'corte': ['Corte Masculino', 'Corte'],
+        'barba': ['Barba Completa', 'Barba'],
+        'corte-barba': ['Corte + Barba']
+    };
+    
+    function findServicePrice(serviceType) {
+        const possibleNames = serviceMapping[serviceType] || [];
+        for (const service of availableServices) {
+            if (possibleNames.some(name => service.name.toLowerCase().includes(name.toLowerCase()))) {
+                return service.price;
+            }
+        }
+        const defaultPrices = { 'corte': 25.00, 'barba': 20.00, 'corte-barba': 40.00 };
+        return defaultPrices[serviceType] || 0;
+    }
+    
     const appointment = {
         id: generateId(),
         clientName: clientName,
         date: date,
         time: time,
         serviceType: serviceType,
+        price: findServicePrice(serviceType),
         status: 'scheduled'
     };
     
@@ -420,12 +439,31 @@ function handleScheduleSubmit() {
 function handleCutSubmit() {
     const clientName = getClientName('cut');
     const serviceType = document.getElementById('cutServiceType').value;
-    const price = parseFloat(document.getElementById('cutPrice').value);
     
-    if (!clientName || !serviceType || !price) {
+    if (!clientName || !serviceType) {
         showNotification('Por favor, preencha todos os campos!', 'error');
         return;
     }
+    
+    // Buscar preço do serviço selecionado
+    const serviceMapping = {
+        'corte': ['Corte Masculino', 'Corte'],
+        'barba': ['Barba Completa', 'Barba'],
+        'corte-barba': ['Corte + Barba']
+    };
+    
+    function findServicePrice(serviceType) {
+        const possibleNames = serviceMapping[serviceType] || [];
+        for (const service of availableServices) {
+            if (possibleNames.some(name => service.name.toLowerCase().includes(name.toLowerCase()))) {
+                return service.price;
+            }
+        }
+        const defaultPrices = { 'corte': 25.00, 'barba': 20.00, 'corte-barba': 40.00 };
+        return defaultPrices[serviceType] || 0;
+    }
+    
+    const price = findServicePrice(serviceType);
     
     // Se for um novo cliente, adicionar à lista de clientes cadastrados
     const activeButton = document.querySelector('#cutModal .client-type-btn.active');
@@ -597,6 +635,7 @@ function showNotification(message, type = 'info') {
 
 // Gerenciamento de clientes
 let registeredClients = [];
+let availableServices = [];
 
 // Carregar clientes do localStorage
 function loadClients() {
@@ -613,6 +652,63 @@ function loadClients() {
         saveClients();
     }
     updateClientSelects();
+}
+
+// Carregar serviços da página vendas
+function loadServices() {
+    const saved = localStorage.getItem('barbearia_services');
+    if (saved) {
+        availableServices = JSON.parse(saved);
+    } else {
+        // Serviços padrão caso não existam na página vendas
+        availableServices = [
+            { id: 1, name: 'Corte Masculino', price: 25.00, duration: 30 },
+            { id: 2, name: 'Barba Completa', price: 20.00, duration: 25 },
+            { id: 3, name: 'Corte + Barba', price: 40.00, duration: 50 }
+        ];
+    }
+    updateServicePrices();
+}
+
+// Atualizar preços dos serviços automaticamente
+function updateServicePrices() {
+    const serviceTypeSelect = document.getElementById('serviceType');
+    const cutServiceTypeSelect = document.getElementById('cutServiceType');
+    const servicePriceDisplay = document.getElementById('servicePrice');
+    
+    // Mapear tipos de serviço para nomes dos serviços
+    const serviceMapping = {
+        'corte': ['Corte Masculino', 'Corte'],
+        'barba': ['Barba Completa', 'Barba'],
+        'corte-barba': ['Corte + Barba']
+    };
+    
+    // Função para encontrar preço do serviço
+    function findServicePrice(serviceType) {
+        const possibleNames = serviceMapping[serviceType] || [];
+        for (const service of availableServices) {
+            if (possibleNames.some(name => service.name.toLowerCase().includes(name.toLowerCase()))) {
+                return service.price;
+            }
+        }
+        // Preços padrão caso não encontre
+        const defaultPrices = { 'corte': 25.00, 'barba': 20.00, 'corte-barba': 40.00 };
+        return defaultPrices[serviceType] || 0;
+    }
+    
+    // Adicionar event listener para atualizar preço automaticamente
+    if (cutServiceTypeSelect && servicePriceDisplay) {
+        cutServiceTypeSelect.addEventListener('change', function() {
+            const selectedService = this.value;
+            if (selectedService) {
+                const price = findServicePrice(selectedService);
+                servicePriceDisplay.textContent = `R$ ${price.toFixed(2).replace('.', ',')}`;
+                servicePriceDisplay.classList.add('show');
+            } else {
+                servicePriceDisplay.classList.remove('show');
+            }
+        });
+    }
 }
 
 // Salvar clientes no localStorage
@@ -714,6 +810,7 @@ function getClientName(modalType) {
 // Inicializar clientes quando a página carregar
 document.addEventListener('DOMContentLoaded', function() {
     loadClients();
+    loadServices();
     setupFinishCutModal();
 });
 
@@ -733,10 +830,33 @@ function openFinishCutModal(appointmentId) {
         return;
     }
     
+    // Buscar preço do serviço
+    const serviceMapping = {
+        'corte': ['Corte Masculino', 'Corte'],
+        'barba': ['Barba Completa', 'Barba'],
+        'corte-barba': ['Corte + Barba']
+    };
+    
+    function findServicePrice(serviceType) {
+        const possibleNames = serviceMapping[serviceType] || [];
+        for (const service of availableServices) {
+            if (possibleNames.some(name => service.name.toLowerCase().includes(name.toLowerCase()))) {
+                return service.price;
+            }
+        }
+        const defaultPrices = { 'corte': 25.00, 'barba': 20.00, 'corte-barba': 40.00 };
+        return defaultPrices[serviceType] || 35.00;
+    }
+    
+    const price = appointment.price || findServicePrice(appointment.serviceType);
+    
     // Preencher dados do agendamento
     document.getElementById('finishClientName').textContent = appointment.clientName;
     document.getElementById('finishServiceName').textContent = getServiceName(appointment.serviceType);
-    document.getElementById('finishServicePrice').textContent = `R$ ${appointment.price || '0,00'}`;
+    document.getElementById('finishServicePrice').textContent = `R$ ${price.toFixed(2).replace('.', ',')}`;
+    
+    // Carregar funcionários no select
+    loadEmployeesInSelect();
     
     // Limpar formulário
     document.getElementById('paymentType').value = '';
@@ -748,6 +868,36 @@ function openFinishCutModal(appointmentId) {
     
     // Mostrar modal
     document.getElementById('finishCutModal').style.display = 'block';
+}
+
+// Carregar funcionários no select
+function loadEmployeesInSelect() {
+    const employeeSelect = document.getElementById('cutEmployee');
+    if (!employeeSelect) return;
+    
+    // Limpar opções existentes
+    employeeSelect.innerHTML = '<option value="">Selecione o funcionário...</option>';
+    
+    // Obter funcionários do localStorage
+    const employees = JSON.parse(localStorage.getItem('employees') || '[]');
+    
+    // Adicionar funcionários ativos ao select
+    employees.forEach(employee => {
+        if (employee.credentials?.active !== false) {
+            const option = document.createElement('option');
+            option.value = employee.id;
+            option.textContent = `${employee.name} (${employee.role})`;
+            employeeSelect.appendChild(option);
+        }
+    });
+    
+    // Selecionar primeiro funcionário por padrão se houver
+    if (employees.length > 0) {
+        const firstActiveEmployee = employees.find(emp => emp.credentials?.active !== false);
+        if (firstActiveEmployee) {
+            employeeSelect.value = firstActiveEmployee.id;
+        }
+    }
 }
 
 // Processar finalização do corte
@@ -772,26 +922,109 @@ function handleFinishCutSubmit(e) {
         return;
     }
     
+    const appointment = appointments[appointmentIndex];
+    
+    // Buscar preço do serviço
+    const serviceMapping = {
+        'corte': ['Corte Masculino', 'Corte'],
+        'barba': ['Barba Completa', 'Barba'],
+        'corte-barba': ['Corte + Barba']
+    };
+    
+    function findServicePrice(serviceType) {
+        const possibleNames = serviceMapping[serviceType] || [];
+        for (const service of availableServices) {
+            if (possibleNames.some(name => service.name.toLowerCase().includes(name.toLowerCase()))) {
+                return service.price;
+            }
+        }
+        const defaultPrices = { 'corte': 25.00, 'barba': 20.00, 'corte-barba': 40.00 };
+        return defaultPrices[serviceType] || 35.00;
+    }
+    
+    const servicePrice = appointment.price || findServicePrice(appointment.serviceType);
+    
     // Marcar como finalizado
     appointments[appointmentIndex].finished = true;
     appointments[appointmentIndex].paid = isPaid;
     appointments[appointmentIndex].paymentType = paymentType;
     appointments[appointmentIndex].finishNotes = notes;
     appointments[appointmentIndex].finishedAt = new Date().toISOString();
+    appointments[appointmentIndex].price = servicePrice;
     
     // Salvar no localStorage
     saveAppointments();
     
-    // Registrar no caixa (se existir a função)
-    if (typeof registerSale === 'function') {
-        const appointment = appointments[appointmentIndex];
-        registerSale({
+    // Usar sistema de sincronização de dados
+    if (window.dataSync) {
+        // Obter funcionário responsável (pode ser selecionado no modal ou usar padrão)
+        const employeeSelect = document.getElementById('cutEmployee');
+        const selectedEmployee = employeeSelect ? employeeSelect.value : null;
+        const employees = dataSync.getData('employees', []);
+        const employee = employees.find(emp => emp.id == selectedEmployee) || employees[0];
+        
+        // Registrar corte com funcionário responsável
+        dataSync.registerCutWithEmployee({
+            client: appointment.clientName,
+            service: getServiceName(appointment.serviceType),
+            price: servicePrice,
+            paymentMethod: paymentType,
+            employee: employee ? employee.name : 'Funcionário não definido',
+            employeeId: employee ? employee.id : null,
+            time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+            notes: notes || ''
+        });
+
+        // Adicionar ao lucro diário
+        dataSync.addDailyProfit(servicePrice, paymentType, {
+            client: appointment.clientName,
+            service: getServiceName(appointment.serviceType),
+            time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+        });
+
+        // Adicionar atividade recente
+        dataSync.addRecentActivity({
+            type: 'service',
+            title: 'Corte Finalizado',
+            description: `${appointment.clientName} - ${getServiceName(appointment.serviceType)} (${getPaymentTypeName(paymentType)})`,
+            time: new Date().toISOString()
+        });
+    } else {
+        // Fallback para funções locais
+        addToDailyProfit(servicePrice, paymentType, {
+            client: appointment.clientName,
+            service: getServiceName(appointment.serviceType),
+            time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+        });
+        
+        // Registrar corte realizado
+        addCompletedCut({
+            client: appointment.clientName,
+            service: getServiceName(appointment.serviceType),
+            price: servicePrice,
+            paymentMethod: paymentType,
+            time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+        });
+        
+        // Adicionar atividade recente
+        addRecentActivity({
+            type: 'service',
+            title: 'Corte Finalizado',
+            description: `${appointment.clientName} - ${getServiceName(appointment.serviceType)} (${getPaymentTypeName(paymentType)})`,
+            time: new Date().toISOString()
+        });
+    }
+    
+    // Registrar venda no sistema de caixa
+    if (typeof dataSync !== 'undefined' && dataSync.registerSale) {
+        dataSync.registerSale({
             type: 'service',
             description: `${getServiceName(appointment.serviceType)} - ${appointment.clientName}`,
-            amount: parseFloat(appointment.price || 0),
+            amount: servicePrice,
             paymentMethod: paymentType,
-            date: new Date().toISOString(),
-            notes: notes
+            clientName: appointment.clientName,
+            serviceType: appointment.serviceType,
+            notes: notes || ''
         });
     }
     
@@ -802,7 +1035,11 @@ function handleFinishCutSubmit(e) {
     renderSchedule();
     
     // Mostrar notificação
-    showNotification('Corte finalizado com sucesso!', 'success');
+    const serviceName = getServiceName(appointment.serviceType);
+    showNotification(
+        `Corte finalizado! ${serviceName} - R$ ${servicePrice.toFixed(2).replace('.', ',')} (${getPaymentTypeName(paymentType)})`, 
+        'success'
+    );
 }
 
 // Função para obter nome do tipo de pagamento
@@ -837,4 +1074,85 @@ function togglePaymentStatus(appointmentId) {
     // Mostrar notificação
     const status = appointments[appointmentIndex].paid ? 'pago' : 'não pago';
     showNotification(`Status alterado para: ${status}`, 'info');
+}
+
+// Funções para gerenciar dados do dashboard
+function addToDailyProfit(value, paymentType, details) {
+    const today = new Date().toISOString().split('T')[0];
+    let dailyData = JSON.parse(localStorage.getItem('dailyData') || '{}');
+    
+    if (!dailyData[today]) {
+        dailyData[today] = {
+            profit: 0,
+            cuts: 0,
+            services: []
+        };
+    }
+    
+    dailyData[today].profit += value;
+    dailyData[today].cuts += 1;
+    dailyData[today].services.push({
+        id: Date.now(),
+        client: details.client,
+        service: details.service,
+        price: value,
+        paymentType: paymentType,
+        time: details.time
+    });
+    
+    localStorage.setItem('dailyData', JSON.stringify(dailyData));
+}
+
+function addCompletedCut(cutData) {
+    let completedCuts = JSON.parse(localStorage.getItem('completedCuts') || '[]');
+    
+    completedCuts.push({
+        id: Date.now(),
+        client: cutData.client,
+        service: cutData.service,
+        price: cutData.price,
+        paymentMethod: cutData.paymentMethod,
+        time: cutData.time,
+        date: new Date().toISOString().split('T')[0],
+        finishedAt: new Date().toISOString()
+    });
+    
+    localStorage.setItem('completedCuts', JSON.stringify(completedCuts));
+}
+
+function addRecentActivity(activity) {
+    let recentActivities = JSON.parse(localStorage.getItem('recentActivities') || '[]');
+    
+    // Adicionar nova atividade no início
+    recentActivities.unshift({
+        id: Date.now(),
+        type: activity.type,
+        title: activity.title,
+        description: activity.description,
+        time: activity.time,
+        value: activity.value || null,
+        displayTime: getTimeAgo(activity.time)
+    });
+    
+    // Manter apenas as últimas 50 atividades
+    if (recentActivities.length > 50) {
+        recentActivities = recentActivities.slice(0, 50);
+    }
+    
+    localStorage.setItem('recentActivities', JSON.stringify(recentActivities));
+}
+
+function getTimeAgo(timestamp) {
+    const now = new Date();
+    const time = new Date(timestamp);
+    const diffInMinutes = Math.floor((now - time) / (1000 * 60));
+    
+    if (diffInMinutes < 1) return 'Agora mesmo';
+    if (diffInMinutes < 60) return `Há ${diffInMinutes} minuto${diffInMinutes > 1 ? 's' : ''}`;
+    
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) return `Há ${diffInHours} hora${diffInHours > 1 ? 's' : ''}`;
+    
+    const diffInDays = Math.floor(diffInHours / 24);
+    return `Há ${diffInDays} dia${diffInDays > 1 ? 's' : ''}`;
 }

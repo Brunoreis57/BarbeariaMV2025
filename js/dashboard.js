@@ -67,51 +67,45 @@ class Dashboard {
 
     // Calcular métricas diárias
     calculateDailyMetrics() {
-        // Buscar dados do localStorage ou simular
+        const today = new Date().toISOString().split('T')[0];
+        const dailyData = JSON.parse(localStorage.getItem('dailyData') || '{}');
+        const todayData = dailyData[today] || { profit: 0, cuts: 0, services: [] };
+        
+        // Buscar agendamentos de hoje
         const appointments = this.getTodayAppointments();
-        const sales = this.getTodaySales();
-        const services = this.getTodayServices();
-
-        const profit = sales.reduce((total, sale) => total + sale.value, 0) + 
-                      services.reduce((total, service) => total + service.price, 0);
         
         return {
-            profit: profit,
-            cuts: services.length,
+            profit: todayData.profit,
+            cuts: todayData.cuts,
             appointments: appointments.length
         };
     }
 
     // Obter agendamentos de hoje
     getTodayAppointments() {
-        // Simular dados - em produção viria do localStorage ou API
-        return [
-            { id: 1, client: 'João Silva', service: 'Corte + Barba', time: '09:00', price: 35, status: 'confirmed' },
-            { id: 2, client: 'Pedro Santos', service: 'Corte Social', time: '10:30', price: 25, status: 'pending' },
-            { id: 3, client: 'Carlos Oliveira', service: 'Barba + Bigode', time: '14:00', price: 20, status: 'confirmed' },
-            { id: 4, client: 'Roberto Costa', service: 'Corte Degradê', time: '15:30', price: 30, status: 'confirmed' },
-            { id: 5, client: 'Lucas Ferreira', service: 'Corte + Sobrancelha', time: '16:00', price: 40, status: 'pending' }
-        ];
+        const today = new Date().toISOString().split('T')[0];
+        const appointments = JSON.parse(localStorage.getItem('appointments') || '{}');
+        const todayAppointments = appointments[today] || [];
+        
+        return todayAppointments;
     }
 
     // Obter vendas de hoje
     getTodaySales() {
-        // Simular dados
-        return [
-            { id: 1, product: 'Shampoo Anticaspa', value: 15, time: '08:30' },
-            { id: 2, product: 'Pomada Modeladora', value: 25, time: '11:15' },
-            { id: 3, product: 'Óleo para Barba', value: 20, time: '13:45' }
-        ];
+        const today = new Date().toISOString().split('T')[0];
+        const sales = JSON.parse(localStorage.getItem('sales') || '{}');
+        const todaySales = sales[today] || [];
+        
+        return todaySales;
     }
 
     // Obter serviços de hoje
     getTodayServices() {
-        // Simular dados
-        return [
-            { id: 1, client: 'João Silva', service: 'Corte + Barba', price: 35, time: '09:00' },
-            { id: 2, client: 'Pedro Santos', service: 'Corte Social', price: 25, time: '10:30' },
-            { id: 3, client: 'Carlos Oliveira', service: 'Barba + Bigode', price: 20, time: '14:00' }
-        ];
+        const today = new Date().toISOString().split('T')[0];
+        const dailyData = JSON.parse(localStorage.getItem('dailyData') || '{}');
+        const todayData = dailyData[today] || { services: [] };
+        
+        return todayData.services || [];
     }
 
     // Carregar agendamentos
@@ -134,20 +128,69 @@ class Dashboard {
         const activitiesList = document.getElementById('activitiesList');
         
         if (activitiesList && activities.length > 0) {
-            // Em produção, você substituiria o conteúdo HTML pelos dados reais
-            console.log('Atividades carregadas:', activities);
+            // Limpar lista atual
+            activitiesList.innerHTML = '';
+            
+            // Adicionar atividades reais
+            activities.slice(0, 5).forEach(activity => {
+                const activityItem = document.createElement('div');
+                activityItem.className = 'activity-item';
+                
+                const iconClass = this.getActivityIcon(activity.type);
+                
+                activityItem.innerHTML = `
+                    <div class="activity-icon ${activity.type}">
+                        <i class="${iconClass}"></i>
+                    </div>
+                    <div class="activity-content">
+                        <h4>${activity.title}</h4>
+                        <p>${activity.description}</p>
+                        <span class="activity-time">${activity.displayTime}</span>
+                    </div>
+                `;
+                
+                activitiesList.appendChild(activityItem);
+            });
         }
     }
 
     // Obter atividades recentes
     getRecentActivities() {
-        return [
-            { type: 'sale', title: 'Venda Realizada', description: 'Shampoo Anticaspa - R$ 15,00', time: 'Há 5 minutos' },
-            { type: 'appointment', title: 'Novo Agendamento', description: 'Maria Silva - Corte Feminino', time: 'Há 15 minutos' },
-            { type: 'service', title: 'Serviço Concluído', description: 'João Silva - Corte + Barba', time: 'Há 30 minutos' },
-            { type: 'client', title: 'Novo Cliente', description: 'Roberto Costa cadastrado', time: 'Há 1 hora' },
-            { type: 'sale', title: 'Venda Realizada', description: 'Pomada Modeladora - R$ 25,00', time: 'Há 2 horas' }
-        ];
+        const recentActivities = JSON.parse(localStorage.getItem('recentActivities') || '[]');
+        
+        // Atualizar o tempo relativo das atividades
+        return recentActivities.map(activity => ({
+            ...activity,
+            displayTime: this.getTimeAgo(activity.time)
+        }));
+    }
+    
+    // Obter ícone da atividade
+    getActivityIcon(type) {
+        const icons = {
+            'service': 'fas fa-cut',
+            'sale': 'fas fa-shopping-cart',
+            'appointment': 'fas fa-calendar-plus',
+            'client': 'fas fa-user-plus',
+            'payment': 'fas fa-credit-card'
+        };
+        return icons[type] || 'fas fa-info-circle';
+    }
+    
+    // Calcular tempo relativo
+    getTimeAgo(timestamp) {
+        const now = new Date();
+        const time = new Date(timestamp);
+        const diffInMinutes = Math.floor((now - time) / (1000 * 60));
+        
+        if (diffInMinutes < 1) return 'Agora mesmo';
+        if (diffInMinutes < 60) return `Há ${diffInMinutes} minuto${diffInMinutes > 1 ? 's' : ''}`;
+        
+        const diffInHours = Math.floor(diffInMinutes / 60);
+        if (diffInHours < 24) return `Há ${diffInHours} hora${diffInHours > 1 ? 's' : ''}`;
+        
+        const diffInDays = Math.floor(diffInHours / 24);
+        return `Há ${diffInDays} dia${diffInDays > 1 ? 's' : ''}`;
     }
 
     // Animar valores numericos

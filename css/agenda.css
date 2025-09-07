@@ -24,9 +24,19 @@ body {
     flex-direction: column;
     min-height: 100vh;
     width: 100%;
-    max-width: 100%;
+    max-width: 100vw;
     margin: 0 auto;
     overflow-x: hidden;
+    padding: 0;
+}
+
+/* Seção principal da agenda */
+.agenda-section {
+    padding: 30px 20px 20px;
+    max-width: min(1200px, 100vw);
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* Sidebar - Desktop */
@@ -153,9 +163,18 @@ body {
     }
     
     .container {
-        max-width: 1200px;
-        margin: 20px auto 0 auto;
-        padding: 20px;
+        width: 100%;
+        max-width: 100vw;
+        padding: 0;
+        overflow-x: hidden;
+    }
+    
+    .agenda-section {
+        padding: 30px 20px 20px;
+        max-width: min(1200px, 100vw);
+        margin: 0 auto;
+        width: 100%;
+        box-sizing: border-box;
     }
     
     /* Layout desktop para cards de ação */
@@ -736,6 +755,28 @@ body {
     font-size: 14px;
 }
 
+.service-price-display {
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: #00CED1;
+    color: white;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 16px;
+    text-align: center;
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.service-price-display.show {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 .form-group input:focus,
 .form-group select:focus {
     outline: none;
@@ -901,6 +942,12 @@ body.light-mode .modal-content {
     border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+/* Manter o modal de finalização sempre escuro */
+body.light-mode #finishCutModal .modal-content {
+    background-color: rgba(30, 30, 30, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 body.light-mode .modal-header {
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
@@ -954,25 +1001,47 @@ body.light-mode .no-appointments {
     .modal-content {
         width: 95%;
         margin: 5% auto;
+        max-height: 85vh;
+    }
+    
+    #finishCutModal .modal-content {
+        width: 95%;
+        max-width: none;
+        margin: 5% auto;
+        max-height: 85vh;
+    }
+    
+    #finishCutModal .modal-body {
+        padding: 20px;
+        max-height: calc(85vh - 100px);
     }
 }
 
 /* Estilos específicos do modal de finalização */
 #finishCutModal .modal-content {
-    max-width: 450px;
+    max-width: 480px;
+    max-height: 90vh;
+    padding: 0;
+    overflow-y: auto;
+}
+
+#finishCutModal .modal-body {
+    padding: 25px 30px;
+    max-height: calc(90vh - 120px);
+    overflow-y: auto;
 }
 
 .client-display,
 .service-display,
 .price-display {
-    display: inline-block;
-    padding: 8px 12px;
+    display: block;
+    padding: 12px 16px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
+    border-radius: 8px;
     color: #f8f8f8;
     font-weight: 500;
-    margin-top: 5px;
-    min-width: 100px;
+    margin: 8px 0;
+    border-left: 3px solid #4CAF50;
 }
 
 .price-display {
@@ -981,7 +1050,13 @@ body.light-mode .no-appointments {
 }
 
 #finishCutForm .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+}
+
+.info-section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 #finishCutForm label {
@@ -1001,6 +1076,12 @@ body.light-mode .no-appointments {
     font-size: 14px;
 }
 
+#paymentType option {
+    background: #fff;
+    color: #000;
+    padding: 8px;
+}
+
 #paymentType:focus {
     outline: none;
     border-color: #4CAF50;
@@ -1017,6 +1098,22 @@ body.light-mode .no-appointments {
     font-size: 14px;
     resize: vertical;
     min-height: 80px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-actions .btn-secondary,
+.form-actions .btn-primary {
+    min-width: 120px;
+    padding: 12px 20px;
+    font-weight: 500;
 }
 
 #finishNotes:focus {
@@ -1071,30 +1168,36 @@ body.light-mode .no-appointments {
 
 /* Light mode para modal de finalização */
 body.light-mode #finishCutModal .modal-content {
-    background-color: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    background-color: rgba(30, 30, 30, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 body.light-mode .client-display,
 body.light-mode .service-display,
 body.light-mode .price-display {
-    background: rgba(0, 0, 0, 0.1);
-    color: #333;
+    background: rgba(255, 255, 255, 0.1);
+    color: #f8f8f8;
 }
 
 body.light-mode .price-display {
-    color: #2E7D32;
+    color: #4CAF50;
 }
 
 body.light-mode #finishCutForm label {
-    color: #333;
+    color: #f8f8f8;
 }
 
 body.light-mode #paymentType,
 body.light-mode #finishNotes {
-    background: rgba(0, 0, 0, 0.05);
-    border-color: rgba(0, 0, 0, 0.2);
-    color: #333;
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #f8f8f8;
+}
+
+body.light-mode #paymentType option {
+    background: #fff;
+    color: #000;
+    padding: 8px;
 }
 
 body.light-mode #paymentType:focus,
@@ -1104,8 +1207,8 @@ body.light-mode #finishNotes:focus {
 }
 
 body.light-mode .btn-secondary {
-    border-color: rgba(0, 0, 0, 0.3);
-    color: #333;
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #f8f8f8;
 }
 
 body.light-mode .btn-secondary:hover {

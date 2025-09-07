@@ -103,6 +103,16 @@
                     <i class="fas fa-plus"></i>
                     <span>Nova Despesa</span>
                 </button>
+                
+                <!-- Botões de alternância de visualização -->
+                <div class="view-toggle">
+                    <button class="view-btn" data-view="gallery" onclick="toggleView('gallery')" title="Modo Galeria">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button class="view-btn" data-view="list" onclick="toggleView('list')" title="Modo Lista">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
             </div>
 
             <!-- Controle de Saldo -->
@@ -184,9 +194,31 @@
                 <input type="date" id="dateFilter" onchange="filterExpenses()">
             </div>
 
-            <!-- Grid de despesas -->
-            <div class="expenses-grid" id="expensesGrid">
-                <!-- Despesas serão inseridas aqui via JavaScript -->
+            <!-- Container de despesas -->
+            <div class="expenses-container">
+                <!-- Modo Galeria -->
+                <div class="expenses-grid" id="expensesGrid">
+                    <!-- Despesas serão inseridas aqui via JavaScript -->
+                </div>
+                
+                <!-- Modo Lista -->
+                <div class="expenses-table-container" id="expensesTable" style="display: none;">
+                    <table class="expenses-table">
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Categoria</th>
+                                <th>Valor</th>
+                                <th>Data</th>
+                                <th>Usuário</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="expensesTableBody">
+                            <!-- Despesas serão inseridas aqui via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -299,6 +331,7 @@
         </div> <!-- Fecha main-wrapper -->
     </div>
 
+    <script src="js/data-sync.js"></script>
     <script src="js/theme.js"></script>
     <script src="js/caixa.js"></script>
 </body>

@@ -6,6 +6,7 @@ let filteredExpenses = [];
 let cashBalance = 0;
 let cashTransactions = [];
 let cashModalType = null; // 'add' ou 'remove'
+let currentView = 'gallery'; // 'gallery' ou 'list'
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', function() {
@@ -13,11 +14,18 @@ document.addEventListener('DOMContentLoaded', function() {
     loadExpenses();
     loadCashBalance();
     setupEventListeners();
-    renderExpenses();
+    if (currentView === 'gallery') {
+        renderExpenses();
+    } else {
+        renderExpensesTable();
+    }
     updateStats();
     updateCashBalance();
     populateUserFilter();
     setDefaultDate();
+    
+    // Ativar botão de galeria por padrão
+    document.querySelector('.view-btn[data-view="gallery"]').classList.add('active');
 });
 
 // Configurar tema
@@ -197,18 +205,85 @@ function renderExpenses(expensesToRender = null) {
         return;
     }
     
-    // Ordenar por data (mais recente primeiro)
-    const sortedExpenses = expensesToShow.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    // Agrupar despesas por mês
+    const groupedExpenses = groupExpensesByMonth(expensesToShow);
+    const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
     
-    expensesGrid.innerHTML = sortedExpenses.map(expense => {
-        const categoryNames = {
-            'alimentacao': 'Alimentação',
-            'limpeza': 'Limpeza',
-            'equipamentos': 'Equipamentos',
-            'manutencao': 'Manutenção',
-            'outros': 'Outros'
-        };
+    let html = '';
+    
+    Object.keys(groupedExpenses).forEach(monthKey => {
+        const monthExpenses = groupedExpenses[monthKey];
+        const isCurrentMonth = monthKey === currentMonth;
+        const monthName = getMonthName(monthKey);
+        const totalAmount = monthExpenses.reduce((sum, expense) => sum + expense.amount, 0);
         
+        html += `
+            <div class="month-section">
+                <div class="month-header" onclick="toggleMonth('${monthKey}')">
+                    <div class="month-info">
+                        <h3>${monthName}</h3>
+                        <span class="month-total">${totalAmount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                        <span class="month-count">${monthExpenses.length} despesa${monthExpenses.length !== 1 ? 's' : ''}</span>
+                    </div>
+                    <i class="fas fa-chevron-down month-toggle-icon ${isCurrentMonth ? 'expanded' : ''}"></i>
+                </div>
+                <div class="month-content ${isCurrentMonth ? 'expanded' : 'collapsed'}" id="month-${monthKey}">
+                    ${renderMonthExpenses(monthExpenses)}
+                </div>
+            </div>
+        `;
+    });
+    
+    expensesGrid.innerHTML = html;
+}
+
+// Agrupar despesas por mês
+function groupExpensesByMonth(expenses) {
+    const grouped = {};
+    
+    expenses.forEach(expense => {
+        const monthKey = expense.date.slice(0, 7); // YYYY-MM
+        if (!grouped[monthKey]) {
+            grouped[monthKey] = [];
+        }
+        grouped[monthKey].push(expense);
+    });
+    
+    // Ordenar meses (mais recente primeiro)
+    const sortedKeys = Object.keys(grouped).sort((a, b) => b.localeCompare(a));
+    const sortedGrouped = {};
+    
+    sortedKeys.forEach(key => {
+        // Ordenar despesas dentro do mês por data (mais recente primeiro)
+        grouped[key].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        sortedGrouped[key] = grouped[key];
+    });
+    
+    return sortedGrouped;
+}
+
+// Obter nome do mês
+function getMonthName(monthKey) {
+    const [year, month] = monthKey.split('-');
+    const date = new Date(year, month - 1);
+    const monthNames = [
+        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    ];
+    return `${monthNames[date.getMonth()]} ${year}`;
+}
+
+// Renderizar despesas de um mês
+function renderMonthExpenses(monthExpenses) {
+    const categoryNames = {
+        'alimentacao': 'Alimentação',
+        'limpeza': 'Limpeza',
+        'equipamentos': 'Equipamentos',
+        'manutencao': 'Manutenção',
+        'outros': 'Outros'
+    };
+    
+    return monthExpenses.map(expense => {
         const formattedDate = new Date(expense.date).toLocaleDateString('pt-BR');
         const formattedAmount = expense.amount.toLocaleString('pt-BR', {
             style: 'currency',
@@ -249,6 +324,154 @@ function renderExpenses(expensesToRender = null) {
             </div>
         `;
     }).join('');
+}
+
+// Alternar visibilidade de um mês
+function toggleMonth(monthKey) {
+    const monthContent = document.getElementById(`month-${monthKey}`);
+    const toggleBtn = document.querySelector(`[onclick="toggleMonth('${monthKey}')"]`);
+    
+    if (monthContent.style.display === 'none') {
+        monthContent.style.display = 'block';
+        toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i>';
+    } else {
+        monthContent.style.display = 'none';
+        toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i>';
+    }
+}
+
+// Funções de alternância de visualização
+function toggleView(view) {
+    currentView = view;
+    
+    // Atualizar botões
+    document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.querySelector(`.view-btn[data-view="${view}"]`).classList.add('active');
+    
+    // Mostrar/ocultar containers
+    const galleryContainer = document.getElementById('expensesGrid');
+    const listContainer = document.getElementById('expensesTable');
+    
+    if (view === 'gallery') {
+        galleryContainer.style.display = 'grid';
+        listContainer.style.display = 'none';
+        renderExpenses();
+    } else {
+        galleryContainer.style.display = 'none';
+        listContainer.style.display = 'block';
+        renderExpensesTable();
+    }
+}
+
+// Renderizar tabela de despesas
+function renderExpensesTable(expensesToRender = null) {
+    const tableBody = document.getElementById('expensesTableBody');
+    const expensesToShow = expensesToRender || expenses;
+    
+    if (expensesToShow.length === 0) {
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 40px; color: #999;">
+                    <i class="fas fa-receipt" style="font-size: 48px; margin-bottom: 15px; display: block;"></i>
+                    Nenhuma despesa encontrada
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    // Agrupar despesas por mês
+    const groupedExpenses = groupExpensesByMonth(expensesToShow);
+    const currentMonth = new Date().toISOString().slice(0, 7);
+    
+    let html = '';
+    
+    Object.keys(groupedExpenses).forEach((monthKey, index) => {
+        const monthExpenses = groupedExpenses[monthKey];
+        const monthName = getMonthName(monthKey);
+        const monthTotal = monthExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+        const formattedTotal = monthTotal.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+        
+        const isCurrentMonth = monthKey === currentMonth;
+        const isVisible = isCurrentMonth || index === 0;
+        
+        // Cabeçalho do mês
+        html += `
+            <tr class="month-header-row" onclick="toggleMonthTable('${monthKey}')">
+                <td colspan="6" style="background: ${isCurrentMonth ? 'linear-gradient(135deg, #00CED1, #20B2AA)' : 'linear-gradient(135deg, #2c3e50, #34495e)'}; color: white; padding: 15px; cursor: pointer; font-weight: 600;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>${monthName}</span>
+                        <span style="display: flex; align-items: center; gap: 15px;">
+                            <span>${formattedTotal}</span>
+                            <i id="toggle-${monthKey}" class="fas ${isVisible ? 'fa-chevron-up' : 'fa-chevron-down'}"></i>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        `;
+        
+        // Despesas do mês
+        const monthRows = renderMonthTableRows(monthExpenses);
+        html += `<tbody id="month-table-${monthKey}" style="display: ${isVisible ? 'table-row-group' : 'none'}">${monthRows}</tbody>`;
+    });
+    
+    tableBody.innerHTML = html;
+}
+
+// Renderizar linhas da tabela para um mês
+function renderMonthTableRows(monthExpenses) {
+    const categoryNames = {
+        'alimentacao': 'Alimentação',
+        'limpeza': 'Limpeza',
+        'equipamentos': 'Equipamentos',
+        'manutencao': 'Manutenção',
+        'outros': 'Outros'
+    };
+    
+    return monthExpenses.map(expense => {
+        const formattedDate = new Date(expense.date).toLocaleDateString('pt-BR');
+        const formattedAmount = expense.amount.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        });
+        
+        return `
+            <tr>
+                <td>${expense.description}</td>
+                <td><span class="category">${categoryNames[expense.category] || expense.category}</span></td>
+                <td class="amount">${formattedAmount}</td>
+                <td>${formattedDate}</td>
+                <td>${expense.user}</td>
+                <td class="actions">
+                    <button class="btn-edit" onclick="editExpense(${expense.id})" title="Editar">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-delete" onclick="deleteExpense(${expense.id})" title="Excluir">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+// Alternar visibilidade de um mês na tabela
+function toggleMonthTable(monthKey) {
+    const monthContent = document.getElementById(`month-table-${monthKey}`);
+    const toggleIcon = document.getElementById(`toggle-${monthKey}`);
+    
+    if (monthContent.style.display === 'none') {
+        monthContent.style.display = 'table-row-group';
+        toggleIcon.className = 'fas fa-chevron-up';
+    } else {
+        monthContent.style.display = 'none';
+        toggleIcon.className = 'fas fa-chevron-down';
+    }
 }
 
 // Atualizar estatísticas
@@ -315,7 +538,11 @@ function searchExpenses() {
         expense.amount.toString().includes(searchTerm)
     );
     
-    renderExpenses(searchResults);
+    if (currentView === 'gallery') {
+        renderExpenses(searchResults);
+    } else {
+        renderExpensesTable(searchResults);
+    }
 }
 
 // Filtrar despesas
@@ -356,7 +583,11 @@ function applyFilters() {
         );
     }
     
-    renderExpenses(filtered);
+    if (currentView === 'gallery') {
+        renderExpenses(filtered);
+    } else {
+        renderExpensesTable(filtered);
+    }
 }
 
 // Abrir modal de adicionar despesa
@@ -467,7 +698,11 @@ function handleExpenseSubmit(event) {
     }
     
     saveExpenses();
-    renderExpenses();
+    if (currentView === 'gallery') {
+        renderExpenses();
+    } else {
+        renderExpensesTable();
+    }
     updateStats();
     populateUserFilter();
     closeModal('expenseModal');
@@ -547,7 +782,11 @@ function confirmDeleteExpense() {
     
     expenses = expenses.filter(e => e.id !== deletingExpenseId);
     saveExpenses();
-    renderExpenses();
+    if (currentView === 'gallery') {
+        renderExpenses();
+    } else {
+        renderExpensesTable();
+    }
     updateStats();
     populateUserFilter();
     closeModal('deleteModal');

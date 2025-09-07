@@ -61,48 +61,63 @@ function loadEmployees() {
         employees = [
             {
                 id: 1,
-                name: 'Carlos Silva',
-                phone: '(11) 99999-1111',
-                email: 'carlos@barbeariamv.com',
-                role: 'barbeiro',
-                commission: 60.0,
-                notes: 'Especialista em cortes clássicos',
+                name: 'Matheus',
+                phone: '(48) 93300-2321',
+                email: 'matheus@barbearia.com',
+                role: 'gerente',
+                commission: 50.0,
+                notes: 'Administrador',
                 credentials: {
-                    username: 'carlos.silva',
-                    password: 'senha123',
+                    username: '48933002321',
+                    password: 'matheus2025',
                     active: true
                 },
                 createdAt: '2024-01-15'
             },
             {
                 id: 2,
-                name: 'Ana Santos',
-                phone: '(11) 88888-2222',
-                email: 'ana@barbeariamv.com',
+                name: 'Vitor',
+                phone: '(48) 99119-9474',
+                email: 'vitor@barbearia.com',
                 role: 'gerente',
-                commission: 45.0,
-                notes: 'Responsável pela gestão e atendimento',
+                commission: 50.0,
+                notes: 'Administrador',
                 credentials: {
-                    username: 'ana.santos',
-                    password: 'gerente456',
+                    username: '48991199474',
+                    password: 'vitor2025',
                     active: true
                 },
                 createdAt: '2024-02-01'
             },
             {
                 id: 3,
-                name: 'Pedro Oliveira',
-                phone: '(11) 77777-3333',
-                email: 'pedro@barbeariamv.com',
-                role: 'assistente',
-                commission: 30.0,
-                notes: 'Auxiliar geral e limpeza',
+                name: 'Marcelo',
+                phone: '(48) 99620-1178',
+                email: 'marcelo@barbearia.com',
+                role: 'gerente',
+                commission: 50.0,
+                notes: 'Administrador',
                 credentials: {
-                    username: 'pedro.oliveira',
-                    password: 'assist789',
-                    active: false
+                    username: '48996201178',
+                    password: 'marcelo2025',
+                    active: true
                 },
                 createdAt: '2024-03-10'
+            },
+            {
+                id: 4,
+                name: 'Alisson',
+                phone: '(48) 98876-8443',
+                email: 'alisson@barbearia.com',
+                role: 'barbeiro',
+                commission: 40.0,
+                notes: 'Barbeiro',
+                credentials: {
+                    username: '48988768443',
+                    password: 'alisson2025',
+                    active: true
+                },
+                createdAt: '2024-04-01'
             }
         ];
         saveEmployees();
@@ -507,3 +522,147 @@ function validateEmployeeLogin(username, password) {
 
 // Exportar função para uso global
 window.validateEmployeeLogin = validateEmployeeLogin;
+
+// Funções de Comissões
+function updateCommissions() {
+    const period = document.getElementById('commissionPeriod').value;
+    const commissionsGrid = document.getElementById('commissionsGrid');
+    
+    if (!commissionsGrid) return;
+    
+    // Calcular período
+    const { startDate, endDate } = getDateRange(period);
+    
+    // Obter comissões usando dataSync se disponível
+    if (typeof dataSync !== 'undefined') {
+        const commissions = dataSync.calculateEmployeeCommissions(startDate, endDate);
+        renderCommissions(commissions);
+    } else {
+        // Fallback: calcular comissões manualmente
+        const commissions = calculateCommissionsManually(startDate, endDate);
+        renderCommissions(commissions);
+    }
+}
+
+function getDateRange(period) {
+    const now = new Date();
+    let startDate, endDate;
+    
+    switch (period) {
+        case 'today':
+            startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            endDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+            break;
+        case 'week':
+            const startOfWeek = new Date(now);
+            startOfWeek.setDate(now.getDate() - now.getDay());
+            startOfWeek.setHours(0, 0, 0, 0);
+            startDate = startOfWeek;
+            endDate = new Date(now);
+            break;
+        case 'month':
+            startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+            endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+            break;
+        default:
+            startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+            endDate = new Date(now);
+    }
+    
+    return { startDate, endDate };
+}
+
+function calculateCommissionsManually(startDate, endDate) {
+    const employees = loadEmployees();
+    const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+    const sales = JSON.parse(localStorage.getItem('sales') || '[]');
+    
+    const commissions = employees.map(employee => {
+        let totalCuts = 0;
+        let totalEarnings = 0;
+        
+        // Calcular cortes realizados
+        const employeeCuts = appointments.filter(app => 
+            app.employeeId === employee.id &&
+            app.status === 'finished' &&
+            new Date(app.date) >= startDate &&
+            new Date(app.date) <= endDate
+        );
+        
+        totalCuts = employeeCuts.length;
+        
+        // Calcular ganhos das vendas
+        const employeeSales = sales.filter(sale => 
+            sale.employeeId === employee.id &&
+            new Date(sale.date) >= startDate &&
+            new Date(sale.date) <= endDate
+        );
+        
+        const salesEarnings = employeeSales.reduce((sum, sale) => {
+            const commission = (sale.amount * (employee.commission || 0)) / 100;
+            return sum + commission;
+        }, 0);
+        
+        totalEarnings = salesEarnings;
+        
+        return {
+            employee,
+            totalCuts,
+            totalEarnings,
+            averagePerCut: totalCuts > 0 ? totalEarnings / totalCuts : 0
+        };
+    });
+    
+    return commissions.filter(c => c.totalCuts > 0 || c.totalEarnings > 0);
+}
+
+function renderCommissions(commissions) {
+    const commissionsGrid = document.getElementById('commissionsGrid');
+    
+    if (commissions.length === 0) {
+        commissionsGrid.innerHTML = `
+            <div class="no-commissions">
+                <i class="fas fa-chart-line"></i>
+                <p>Nenhuma comissão encontrada para o período selecionado.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    commissionsGrid.innerHTML = commissions.map(commission => {
+        const employee = commission.employee;
+        const initials = employee.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        
+        return `
+            <div class="commission-card">
+                <div class="commission-header">
+                    <div class="commission-avatar">${initials}</div>
+                    <div class="commission-info">
+                        <h4>${employee.name}</h4>
+                        <p>${employee.role} • ${employee.commission || 0}% comissão</p>
+                    </div>
+                </div>
+                <div class="commission-stats">
+                    <div class="commission-stat">
+                        <span class="value">${commission.totalCuts}</span>
+                        <span class="label">Cortes</span>
+                    </div>
+                    <div class="commission-stat">
+                        <span class="value">R$ ${commission.totalEarnings.toFixed(2).replace('.', ',')}</span>
+                        <span class="label">Ganhos</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Inicializar comissões quando a página carregar
+document.addEventListener('DOMContentLoaded', function() {
+    // Aguardar um pouco para garantir que outros scripts carregaram
+    setTimeout(() => {
+        if (document.getElementById('commissionsGrid')) {
+            updateCommissions();
+        }
+    }, 500);
+});

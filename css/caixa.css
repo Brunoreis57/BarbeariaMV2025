@@ -287,6 +287,129 @@ body {
     box-shadow: 0 5px 15px rgba(0, 206, 209, 0.4);
 }
 
+/* Botões de alternância de visualização */
+.view-toggle {
+    display: flex;
+    background: rgba(25, 25, 25, 0.8);
+    border-radius: 25px;
+    padding: 4px;
+    border: 2px solid #2c3e50;
+}
+
+.view-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: transparent;
+    color: #999;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.view-btn.active {
+    background: linear-gradient(135deg, #00CED1, #20B2AA);
+    color: white;
+    box-shadow: 0 2px 8px rgba(0, 206, 209, 0.3);
+}
+
+.view-btn:hover:not(.active) {
+    color: #ccc;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Tabela de despesas */
+.expenses-table-container {
+    background: rgba(25, 25, 25, 0.8);
+    border-radius: 15px;
+    overflow: hidden;
+    border: 2px solid #2c3e50;
+}
+
+.expenses-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.expenses-table th {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    color: white;
+    padding: 15px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+    border-bottom: 2px solid #00CED1;
+}
+
+.expenses-table td {
+    padding: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 14px;
+}
+
+.expenses-table tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+.expenses-table tbody tr:hover {
+    background: rgba(0, 206, 209, 0.1);
+}
+
+.expenses-table .amount {
+    font-weight: 600;
+    color: #ff6b6b;
+}
+
+.expenses-table .category {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    background: rgba(0, 206, 209, 0.2);
+    color: #00CED1;
+}
+
+.expenses-table .actions {
+    display: flex;
+    gap: 8px;
+}
+
+.expenses-table .btn-edit,
+.expenses-table .btn-delete {
+    padding: 6px 8px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s ease;
+}
+
+.expenses-table .btn-edit {
+    background: rgba(52, 152, 219, 0.2);
+    color: #3498db;
+}
+
+.expenses-table .btn-edit:hover {
+    background: #3498db;
+    color: white;
+}
+
+.expenses-table .btn-delete {
+    background: rgba(0, 206, 209, 0.2);
+    color: #00CED1;
+}
+
+.expenses-table .btn-delete:hover {
+    background: #00CED1;
+    color: white;
+}
+
 /* Seção de controle de saldo */
 .cash-balance-section {
     margin-bottom: 30px;
@@ -506,8 +629,8 @@ body {
 }
 
 .expense-category.equipamentos {
-    background: rgba(220, 53, 69, 0.2);
-    color: #dc3545;
+    background: rgba(0, 206, 209, 0.2);
+    color: #00CED1;
 }
 
 .expense-category.manutencao {
@@ -545,11 +668,11 @@ body {
 }
 
 .delete-btn {
-    color: #e74c3c;
+    color: #00CED1;
 }
 
 .delete-btn:hover {
-    background-color: rgba(231, 76, 60, 0.1);
+    background-color: rgba(0, 206, 209, 0.1);
     transform: scale(1.1);
 }
 
@@ -789,14 +912,14 @@ body {
 }
 
 .delete-btn {
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    background: linear-gradient(135deg, #00CED1, #008B8B);
     color: white;
 }
 
 .delete-btn:hover {
-    background: linear-gradient(135deg, #c0392b, #e74c3c);
+    background: linear-gradient(135deg, #008B8B, #00CED1);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+    box-shadow: 0 5px 15px rgba(0, 206, 209, 0.4);
 }
 
 /* Modo claro */
@@ -967,5 +1090,104 @@ body.light-mode .modal-body p {
     
     .expense-amount {
         font-size: 20px;
+    }
+}
+
+/* Estilos para agrupamento por mês */
+.month-section {
+    margin-bottom: 30px;
+    background: rgba(25, 25, 25, 0.6);
+    border-radius: 15px;
+    border: 1px solid #2c3e50;
+    overflow: hidden;
+}
+
+.month-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    border-bottom: 1px solid #34495e;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.month-header:hover {
+    background: linear-gradient(135deg, #34495e, #3c5a78);
+}
+
+.month-info h3 {
+    color: #00CED1;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.month-total {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.month-toggle {
+    background: none;
+    border: none;
+    color: #00CED1;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.month-toggle:hover {
+    background: rgba(0, 206, 209, 0.2);
+    transform: scale(1.1);
+}
+
+.month-content {
+    padding: 20px;
+}
+
+.month-content .expenses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* Mês atual sempre visível */
+.month-section.current-month .month-header {
+    background: linear-gradient(135deg, #00CED1, #20B2AA);
+}
+
+.month-section.current-month .month-header:hover {
+    background: linear-gradient(135deg, #20B2AA, #00CED1);
+}
+
+.month-section.current-month .month-info h3 {
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .month-header {
+        padding: 15px 20px;
+    }
+    
+    .month-info h3 {
+        font-size: 16px;
+    }
+    
+    .month-total {
+        font-size: 14px;
+    }
+    
+    .month-content {
+        padding: 15px;
+    }
+    
+    .month-content .expenses-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
     }
 }

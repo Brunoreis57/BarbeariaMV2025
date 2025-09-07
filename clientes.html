@@ -102,6 +102,16 @@
                     <i class="fas fa-user-plus"></i>
                     <span>Novo Cliente</span>
                 </button>
+                
+                <!-- Botões de visualização -->
+                <div class="view-toggle">
+                    <button class="view-btn active" id="galleryViewBtn" onclick="setViewMode('gallery')" title="Visualização em Galeria">
+                        <i class="fas fa-th-large"></i>
+                    </button>
+                    <button class="view-btn" id="listViewBtn" onclick="setViewMode('list')" title="Visualização em Lista">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
             </div>
 
             <!-- Estatísticas -->
@@ -129,9 +139,31 @@
                 </div>
             </div>
 
-            <!-- Lista de clientes -->
-            <div class="clients-grid" id="clientsGrid">
-                <!-- Clientes serão carregados dinamicamente -->
+            <!-- Container de clientes -->
+            <div class="clients-container">
+                <!-- Modo Galeria -->
+                <div class="clients-grid" id="clientsGrid">
+                    <!-- Clientes serão carregados dinamicamente -->
+                </div>
+                
+                <!-- Modo Lista -->
+                <div class="clients-table-container" id="clientsTable" style="display: none;">
+                    <table class="clients-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Telefone</th>
+                                <th>E-mail</th>
+                                <th>Último Corte</th>
+                                <th>Pacote</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clientsTableBody">
+                            <!-- Clientes serão carregados dinamicamente -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
     </div>

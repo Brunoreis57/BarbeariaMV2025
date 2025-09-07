@@ -2,6 +2,7 @@
 let clients = [];
 let editingClientId = null;
 let deletingClientId = null;
+let currentViewMode = 'gallery'; // 'gallery' ou 'list'
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', function() {
@@ -10,6 +11,9 @@ document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
     renderClients();
     updateStats();
+    
+    // Definir modo galeria como padrão
+    document.querySelector('[onclick="setViewMode(\'gallery\')"]').classList.add('active');
 });
 
 // Configurar tema
@@ -195,6 +199,86 @@ function renderClients(filteredClients = null) {
     }).join('');
 }
 
+// Funções de visualização
+function setViewMode(mode) {
+    currentViewMode = mode;
+    
+    // Atualizar botões
+    document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.querySelector(`[onclick="setViewMode('${mode}')"]`).classList.add('active');
+    
+    // Mostrar/ocultar containers
+    const galleryContainer = document.getElementById('clientsGrid');
+    const listContainer = document.getElementById('clientsTable');
+    
+    if (mode === 'gallery') {
+        galleryContainer.style.display = 'grid';
+        listContainer.style.display = 'none';
+        renderClients();
+    } else {
+        galleryContainer.style.display = 'none';
+        listContainer.style.display = 'block';
+        renderClientsTable();
+    }
+}
+
+// Renderizar clientes em formato de tabela
+function renderClientsTable(filteredClients = null) {
+    const tableBody = document.querySelector('#clientsTable tbody');
+    const clientsToRender = filteredClients || clients;
+    
+    if (clientsToRender.length === 0) {
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="5" class="empty-state">
+                    <i class="fas fa-users"></i>
+                    <h3>Nenhum cliente encontrado</h3>
+                    <p>Adicione seu primeiro cliente para começar.</p>
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    tableBody.innerHTML = clientsToRender.map(client => {
+        const packageStatus = getPackageStatus(client.package);
+        const packageBadge = client.package ? 
+            `<span class="package-status ${packageStatus.active ? 'package-active' : 'package-expired'}">
+                ${packageStatus.text}
+            </span>` : '<span class="package-status package-none">Sem pacote</span>';
+        
+        return `
+            <tr>
+                <td>
+                    <div class="table-client-name">${client.name}</div>
+                    <div class="table-contact">
+                        ${client.phone ? `<i class="fas fa-phone"></i> ${client.phone}` : ''}
+                        ${client.email ? `<br><i class="fas fa-envelope"></i> ${client.email}` : ''}
+                    </div>
+                </td>
+                <td>${client.cutsCount}</td>
+                <td>${packageBadge}</td>
+                <td>${client.package ? `${client.package.usedCuts}/${client.package.totalCuts}` : '-'}</td>
+                <td>
+                    <div class="table-actions">
+                        <button class="action-btn edit-btn" onclick="editClient(${client.id})" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn package-btn" onclick="openPackageModal(${client.id})" title="Pacote">
+                            <i class="fas fa-gift"></i>
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deleteClient(${client.id})" title="Excluir">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
 // Atualizar estatísticas
 function updateStats() {
     const totalClients = clients.length;
@@ -213,7 +297,11 @@ function searchClients() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
     
     if (!searchTerm) {
-        renderClients();
+        if (currentViewMode === 'gallery') {
+            renderClients();
+        } else {
+            renderClientsTable();
+        }
         return;
     }
     
@@ -223,7 +311,11 @@ function searchClients() {
         (client.email && client.email.toLowerCase().includes(searchTerm))
     );
     
-    renderClients(filteredClients);
+    if (currentViewMode === 'gallery') {
+        renderClients(filteredClients);
+    } else {
+        renderClientsTable(filteredClients);
+    }
 }
 
 // Abrir modal de adicionar cliente
