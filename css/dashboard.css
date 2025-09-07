@@ -10,7 +10,7 @@ body {
     display: block !important;
     align-items: unset !important;
     height: auto !important;
-    background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+    background: linear-gradient(135deg, rgba(45, 45, 45, 0.9), rgba(35, 35, 35, 0.95));
     min-height: 100vh;
     color: #e8eaed;
     font-family: 'Inter', sans-serif;
@@ -683,8 +683,8 @@ body {
      
      /* MODO CLARO - DESIGN ELEGANTE E EQUILIBRADO */
       body.light-mode {
-          background: linear-gradient(135deg, #ffffff, #f8f9fa);
-          color: #1a1a1a;
+          background: linear-gradient(135deg, rgba(45, 45, 45, 0.9), rgba(35, 35, 35, 0.95));
+          color: #f8f8f8;
       }
       
       /* Header no modo claro */
