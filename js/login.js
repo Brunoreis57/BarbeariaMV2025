@@ -126,10 +126,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     localStorage.removeItem('rememberedUser');
                 }
                 
-                // Redirecionar para o menu principal
+                // Detectar se é desktop ou mobile para redirecionamento
+                const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                const redirectPage = isMobile ? 'menu.html' : 'dashboard.html';
+                
                 showSuccess(`Bem-vindo, ${authenticatedUser.name}! Redirecionando...`);
                 setTimeout(() => {
-                    window.location.href = 'menu.html';
+                    window.location.href = redirectPage;
                 }, 1500);
             } else {
                 showError('Número de telefone ou senha incorretos');
