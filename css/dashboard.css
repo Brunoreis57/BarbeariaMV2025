@@ -163,7 +163,7 @@ body {
 }
 
 .metric-card {
-    background: linear-gradient(135deg, rgba(64, 64, 64, 0.9), rgba(48, 48, 48, 0.95));
+    background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(16, 16, 16, 0.95));
     border-radius: 10px;
     padding: 25px;
     box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
@@ -1111,7 +1111,7 @@ body {
     }
     
     .metric-card {
-        background: linear-gradient(135deg, rgba(64, 64, 64, 0.9), rgba(48, 48, 48, 0.95));
+        background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(16, 16, 16, 0.95));
         border-radius: 15px;
         padding: 15px 12px;
         min-height: 100px;
@@ -1635,7 +1635,7 @@ body {
         padding: 30px;
         min-height: 140px;
         border-radius: 12px;
-        background: linear-gradient(135deg, rgba(64, 64, 64, 0.9), rgba(48, 48, 48, 0.95));
+        background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(16, 16, 16, 0.95));
         backdrop-filter: blur(10px);
         border: 1px solid rgba(96, 96, 96, 0.3);
     }
