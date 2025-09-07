@@ -679,3 +679,19 @@ html {
         text-align: center;
     }
 }
+
+/* Modo claro */
+body.light-mode {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+}
+
+body.light-mode .year-select {
+    background: white;
+    color: #333;
+    border-color: #ddd;
+}
+
+body.light-mode .year-select option {
+    background: white;
+    color: #333;
+}
