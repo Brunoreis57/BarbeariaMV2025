@@ -1093,6 +1093,7 @@ body {
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
+        background: linear-gradient(135deg, rgba(45, 45, 45, 0.9), rgba(35, 35, 35, 0.95)) !important;
         text-align: center;
     }
     
