@@ -95,138 +95,124 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('employees', JSON.stringify(defaultEmployees));
             }
             
-            // Autenticar usuário (com suporte ao Supabase)
-            const authenticatedUser = await authenticateUser(username, password);
+            // Autenticar usuário (apenas localStorage)
+            const authenticatedUser = authenticateUserLocalStorage(username, password);
             
             console.log('Usuário autenticado:', authenticatedUser ? authenticatedUser.name : 'Nenhum');
             
-    // Autenticar usuário (com suporte ao Supabase e fallback robusto)
-    async function authenticateUser(username, password) {
-        console.log('🔐 Iniciando autenticação para:', username);
+    // Autenticar usuário (apenas localStorage - sem Supabase)
+    function authenticateUserLocalStorage(username, password) {
+        console.log('🔐 Autenticação LOCAL para:', username);
         console.log('📱 User Agent:', navigator.userAgent);
         console.log('🌐 URL atual:', window.location.href);
         
-        // Verificar se é mobile
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        console.log('📱 É mobile:', isMobile);
+        // Garantir que os funcionários estão carregados
+        let currentEmployees = JSON.parse(localStorage.getItem('employees') || '[]');
         
-        let authResult = null;
-        let authMethod = 'none';
-        
-        // Tentar autenticação com Supabase primeiro (se disponível)
-        if (window.SupabaseAuth && typeof window.SupabaseAuth.login === 'function') {
-            try {
-                console.log('🔄 Tentando autenticação via Supabase...');
-                const result = await Promise.race([
-                    window.SupabaseAuth.login(username, password),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 10000))
-                ]);
-                
-                if (result && result.success) {
-                    console.log('✅ Autenticação Supabase bem-sucedida');
-                    authResult = result.funcionario;
-                    authMethod = 'supabase';
-                } else {
-                    console.log('❌ Falha na autenticação Supabase:', result);
+        // Se não há funcionários, inicializar com dados padrão
+        if (currentEmployees.length === 0) {
+            console.log('📝 Inicializando funcionários padrão...');
+            currentEmployees = [
+                {
+                    id: 1,
+                    name: 'Matheus',
+                    phone: '(48) 93300-2321',
+                    email: 'matheus@barbearia.com',
+                    role: 'gerente',
+                    commission: 50.0,
+                    notes: 'Administrador',
+                    credentials: {
+                        username: '48933002321',
+                        password: 'matheus2025',
+                        active: true
+                    },
+                    createdAt: '2024-03-01'
+                },
+                {
+                    id: 2,
+                    name: 'Vitor',
+                    phone: '(48) 99119-9474',
+                    email: 'vitor@barbearia.com',
+                    role: 'gerente',
+                    commission: 50.0,
+                    notes: 'Administrador',
+                    credentials: {
+                        username: '48991199474',
+                        password: 'vitor2025',
+                        active: true
+                    },
+                    createdAt: '2024-03-05'
+                },
+                {
+                    id: 3,
+                    name: 'Marcelo',
+                    phone: '(48) 99620-1178',
+                    email: 'marcelo@barbearia.com',
+                    role: 'gerente',
+                    commission: 50.0,
+                    notes: 'Administrador',
+                    credentials: {
+                        username: '48996201178',
+                        password: 'marcelo2025',
+                        active: true
+                    },
+                    createdAt: '2024-03-10'
+                },
+                {
+                    id: 4,
+                    name: 'Alisson',
+                    phone: '(48) 98876-8443',
+                    email: 'alisson@barbearia.com',
+                    role: 'barbeiro',
+                    commission: 40.0,
+                    notes: 'Barbeiro',
+                    credentials: {
+                        username: '48988768443',
+                        password: 'alisson2025',
+                        active: true
+                    },
+                    createdAt: '2024-04-01'
                 }
-            } catch (error) {
-                console.log('⚠️ Erro no Supabase, usando fallback:', error.message);
+            ];
+            localStorage.setItem('employees', JSON.stringify(currentEmployees));
+            console.log('✅ Funcionários padrão criados!');
+        }
+        
+        console.log('👥 Total de funcionários:', currentEmployees.length);
+        
+        // Buscar usuário nas credenciais
+        const user = currentEmployees.find(emp => {
+            const hasCredentials = emp.credentials && 
+                                 emp.credentials.username && 
+                                 emp.credentials.password;
+            
+            if (!hasCredentials) {
+                console.log(`❌ ${emp.name}: sem credenciais válidas`);
+                return false;
             }
+            
+            const match = emp.credentials.username === username && 
+                         emp.credentials.password === password &&
+                         emp.credentials.active === true;
+            
+            console.log(`🔍 ${emp.name}: username=${emp.credentials.username}, match=${match}`);
+            return match;
+        });
+        
+        if (user) {
+            console.log('✅ LOGIN REALIZADO COM SUCESSO!');
+            console.log('👤 Usuário:', user.name, '| Função:', user.role);
+            return user;
         } else {
-            console.log('⚠️ SupabaseAuth não disponível, usando localStorage');
-        }
-        
-        // Fallback para localStorage se Supabase falhar
-        if (!authResult) {
-            console.log('🔄 Tentando autenticação via localStorage...');
-            
-            // Garantir que os funcionários estão carregados
-            let currentEmployees = JSON.parse(localStorage.getItem('employees') || '[]');
-            
-            // Se não há funcionários, inicializar com dados padrão
-            if (currentEmployees.length === 0) {
-                console.log('📝 Inicializando funcionários padrão...');
-                currentEmployees = [
-                    {
-                        id: 1,
-                        name: 'Matheus',
-                        phone: '(48) 93300-2321',
-                        role: 'gerente',
-                        credentials: {
-                            username: '48933002321',
-                            password: 'matheus2025',
-                            active: true
-                        }
-                    },
-                    {
-                        id: 2,
-                        name: 'Vitor',
-                        phone: '(48) 99119-9474',
-                        role: 'gerente',
-                        credentials: {
-                            username: '48991199474',
-                            password: 'vitor2025',
-                            active: true
-                        }
-                    },
-                    {
-                        id: 3,
-                        name: 'Marcelo',
-                        phone: '(48) 99620-1178',
-                        role: 'gerente',
-                        credentials: {
-                            username: '48996201178',
-                            password: 'marcelo2025',
-                            active: true
-                        }
-                    },
-                    {
-                        id: 4,
-                        name: 'Alisson',
-                        phone: '(48) 98876-8443',
-                        role: 'barbeiro',
-                        credentials: {
-                            username: '48988768443',
-                            password: 'alisson2025',
-                            active: true
-                        }
-                    }
-                ];
-                localStorage.setItem('employees', JSON.stringify(currentEmployees));
-            }
-            
-            console.log('👥 Total de funcionários:', currentEmployees.length);
-            
-            // Buscar usuário
-            const user = currentEmployees.find(emp => {
-                const hasCredentials = emp.credentials && 
-                                     emp.credentials.username && 
-                                     emp.credentials.password;
-                
-                if (!hasCredentials) {
-                    console.log(`❌ ${emp.name}: sem credenciais válidas`);
-                    return false;
+            console.log('❌ CREDENCIAIS INVÁLIDAS!');
+            console.log('📋 Credenciais disponíveis:');
+            currentEmployees.forEach(emp => {
+                if (emp.credentials) {
+                    console.log(`   ${emp.name}: ${emp.credentials.username} / ${emp.credentials.password}`);
                 }
-                
-                const match = emp.credentials.username === username && 
-                             emp.credentials.password === password &&
-                             emp.credentials.active === true;
-                
-                console.log(`🔍 ${emp.name}: username=${emp.credentials.username}, match=${match}`);
-                return match;
             });
-            
-            if (user) {
-                console.log('✅ Autenticação localStorage bem-sucedida');
-                authResult = user;
-                authMethod = 'localStorage';
-            } else {
-                console.log('❌ Credenciais não encontradas no localStorage');
-            }
+            return null;
         }
-        
-        console.log('🎯 Resultado final:', authResult ? `${authResult.name} (${authMethod})` : 'Falha na autenticação');
-        return authResult;
     }
             
             console.log('Usuário autenticado:', authenticatedUser ? authenticatedUser.name : 'Nenhum');
