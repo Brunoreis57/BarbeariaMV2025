@@ -12,8 +12,46 @@ const SUPABASE_CONFIG = {
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB1a3BlbXF4ZWdqbmltZmpoYmZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyNzUzODEsImV4cCI6MjA3Mjg1MTM4MX0.1Qz88NDo8us9md-7tnNFcuUG088itgXtVL8wxLmjCUw' // Substitua pela chave anon do seu projeto
 };
 
-// Inicializar cliente Supabase
-const supabase = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+// Inicializar cliente Supabase com verificações de segurança
+let supabase = null;
+
+// Função para inicializar o Supabase de forma segura
+function initializeSupabase() {
+    try {
+        if (typeof window.supabase === 'undefined') {
+            console.warn('⚠️ Supabase não carregado ainda');
+            return false;
+        }
+        
+        if (typeof window.supabase.createClient !== 'function') {
+            console.warn('⚠️ createClient não é uma função');
+            return false;
+        }
+        
+        supabase = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+        
+        if (!supabase) {
+            console.error('❌ Falha ao criar cliente Supabase');
+            return false;
+        }
+        
+        console.log('✅ Cliente Supabase inicializado com sucesso');
+        return true;
+    } catch (error) {
+        console.error('❌ Erro ao inicializar Supabase:', error);
+        return false;
+    }
+}
+
+// Tentar inicializar imediatamente
+if (!initializeSupabase()) {
+    // Se falhar, tentar novamente após um delay
+    setTimeout(() => {
+        if (!initializeSupabase()) {
+            console.error('❌ Falha definitiva na inicialização do Supabase');
+        }
+    }, 1000);
+}
 
 // =====================================================
 // FUNÇÕES DE AUTENTICAÇÃO
@@ -27,6 +65,19 @@ const supabase = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONF
  */
 async function loginFuncionario(usuario, senha) {
     try {
+        // Verificar se o Supabase está inicializado
+        if (!supabase) {
+            console.warn('⚠️ Supabase não inicializado, tentando inicializar...');
+            if (!initializeSupabase()) {
+                throw new Error('Supabase não disponível');
+            }
+        }
+        
+        // Verificar se a função RPC existe
+        if (typeof supabase.rpc !== 'function') {
+            throw new Error('Função RPC não disponível no cliente Supabase');
+        }
+        
         const { data, error } = await supabase.rpc('login_funcionario', {
             usuario_input: usuario,
             senha_input: senha
