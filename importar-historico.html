@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Importar Dados Históricos - Barbearia MV</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .import-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .import-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .import-header h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .import-header p {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+        }
+        
+        .import-form {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .form-group textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            resize: vertical;
+            background: var(--input-bg);
+            color: var(--text-primary);
+        }
+        
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        .import-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-import {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-import:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-import:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-clear {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-clear:hover {
+            background: #5a6268;
+        }
+        
+        .progress-container {
+            display: none;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .result-container {
+            display: none;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+        
+        .result-success {
+            border-left: 4px solid #28a745;
+        }
+        
+        .result-error {
+            border-left: 4px solid #dc3545;
+        }
+        
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .result-header i {
+            font-size: 24px;
+        }
+        
+        .result-success .result-header i {
+            color: #28a745;
+        }
+        
+        .result-error .result-header i {
+            color: #dc3545;
+        }
+        
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: var(--bg-secondary);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        .back-btn {
+            background: var(--secondary-color);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .sample-data {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: #6c757d;
+        }
+        
+        .sample-data h4 {
+            margin: 0 0 10px 0;
+            font-family: inherit;
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <div class="import-container">
+        <a href="menu.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Voltar ao Menu
+        </a>
+        
+        <div class="import-header">
+            <h1><i class="fas fa-upload"></i> Importar Dados Históricos</h1>
+            <p>Importe dados de vendas de julho e agosto de 2024</p>
+        </div>
+        
+        <div class="import-form">
+            <div class="form-group">
+                <label for="dadosHistoricos">
+                    <i class="fas fa-database"></i> 
+                    Cole os dados históricos abaixo:
+                </label>
+                <textarea 
+                    id="dadosHistoricos" 
+                    placeholder="Cole aqui os dados no formato:\n21/jul    PLANO    R$-    CRED    LUCAS 250,00    PG    ALISSON    R$ -\n01/ago    CORTE NAVALHADO    R$50,00    PIX    LUCAS    PG    ALISSON    R$ 25.00\n..."
+                ></textarea>
+                
+                <div class="sample-data">
+                    <h4>Exemplo de formato esperado:</h4>
+                    21/jul    PLANO    R$-    CRED    LUCAS 250,00    PG    ALISSON    R$ -<br>
+                    01/ago    CORTE NAVALHADO    R$50,00    PIX    LUCAS    PG    ALISSON    R$ 25.00<br>
+                    01/ago    CORTE TESOURA    R$45,00    CRED    HENRIQUE    PG    ALISSON    R$ 22.50
+                </div>
+            </div>
+            
+            <div class="import-actions">
+                <button type="button" class="btn-import" onclick="iniciarImportacao()">
+                    <i class="fas fa-upload"></i>
+                    Importar Dados
+                </button>
+                <button type="button" class="btn-clear" onclick="limparDados()">
+                    <i class="fas fa-trash"></i>
+                    Limpar
+                </button>
+            </div>
+        </div>
+        
+        <div class="progress-container" id="progressContainer">
+            <h3><i class="fas fa-cog fa-spin"></i> Processando dados...</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p id="progressText">Iniciando importação...</p>
+        </div>
+        
+        <div class="result-container" id="resultContainer">
+            <div class="result-header">
+                <i id="resultIcon"></i>
+                <h2 id="resultTitle"></h2>
+            </div>
+            
+            <div id="resultContent"></div>
+            
+            <div class="import-actions" style="margin-top: 20px;">
+                <button type="button" class="btn-import" onclick="voltarAoMenu()">
+                    <i class="fas fa-home"></i>
+                    Ir para Dashboard
+                </button>
+                <button type="button" class="btn-clear" onclick="novaImportacao()">
+                    <i class="fas fa-redo"></i>
+                    Nova Importação
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/import-historico.js"></script>
+    <script>
+        function iniciarImportacao() {
+            const dadosTextarea = document.getElementById('dadosHistoricos');
+            const dadosBrutos = dadosTextarea.value.trim();
+            
+            if (!dadosBrutos) {
+                alert('Por favor, cole os dados históricos antes de importar.');
+                return;
+            }
+            
+            // Mostrar progresso
+            document.querySelector('.import-form').style.display = 'none';
+            document.getElementById('progressContainer').style.display = 'block';
+            
+            // Simular progresso
+            let progress = 0;
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 20;
+                if (progress > 90) progress = 90;
+                
+                progressFill.style.width = progress + '%';
+                
+                if (progress < 30) {
+                    progressText.textContent = 'Analisando formato dos dados...';
+                } else if (progress < 60) {
+                    progressText.textContent = 'Processando transações...';
+                } else if (progress < 90) {
+                    progressText.textContent = 'Salvando no sistema...';
+                }
+            }, 200);
+            
+            // Executar importação
+            setTimeout(() => {
+                clearInterval(progressInterval);
+                progressFill.style.width = '100%';
+                progressText.textContent = 'Finalizando...';
+                
+                setTimeout(() => {
+                    const resultado = importarDadosHistoricos(dadosBrutos);
+                    mostrarResultado(resultado);
+                }, 500);
+            }, 2000);
+        }
+        
+        function mostrarResultado(resultado) {
+            document.getElementById('progressContainer').style.display = 'none';
+            
+            const resultContainer = document.getElementById('resultContainer');
+            const resultIcon = document.getElementById('resultIcon');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultContent = document.getElementById('resultContent');
+            
+            if (resultado.sucesso) {
+                resultContainer.className = 'result-container result-success';
+                resultIcon.className = 'fas fa-check-circle';
+                resultTitle.textContent = 'Importação Concluída com Sucesso!';
+                
+                resultContent.innerHTML = `
+                    <div class="result-stats">
+                        <div class="stat-card">
+                            <div class="stat-value">${resultado.resultado.totalTransacoes}</div>
+                            <div class="stat-label">Transações Importadas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${resultado.resultado.valorTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</div>
+                            <div class="stat-label">Valor Total</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${resultado.resultado.periodo.inicio}</div>
+                            <div class="stat-label">Data Inicial</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${resultado.resultado.periodo.fim}</div>
+                            <div class="stat-label">Data Final</div>
+                        </div>
+                    </div>
+                    
+                    <p><strong>✅ Os dados foram integrados com sucesso ao sistema!</strong></p>
+                    <p>• Todas as transações estão disponíveis no módulo Caixa</p>
+                    <p>• As vendas aparecem no histórico de Vendas</p>
+                    <p>• Os relatórios foram atualizados automaticamente</p>
+                `;
+            } else {
+                resultContainer.className = 'result-container result-error';
+                resultIcon.className = 'fas fa-exclamation-triangle';
+                resultTitle.textContent = 'Erro na Importação';
+                
+                resultContent.innerHTML = `
+                    <p><strong>❌ Ocorreu um erro durante a importação:</strong></p>
+                    <p style="color: #dc3545; font-family: monospace; background: #f8f9fa; padding: 10px; border-radius: 4px;">${resultado.erro}</p>
+                    <p><strong>Possíveis soluções:</strong></p>
+                    <ul>
+                        <li>Verifique se os dados estão no formato correto</li>
+                        <li>Certifique-se de que não há linhas vazias no início ou fim</li>
+                        <li>Confirme se as datas estão no formato DD/MMM</li>
+                        <li>Verifique se os valores estão no formato R$XX,XX</li>
+                    </ul>
+                `;
+            }
+            
+            resultContainer.style.display = 'block';
+        }
+        
+        function limparDados() {
+            document.getElementById('dadosHistoricos').value = '';
+        }
+        
+        function voltarAoMenu() {
+            window.location.href = 'dashboard.html';
+        }
+        
+        function novaImportacao() {
+            document.querySelector('.import-form').style.display = 'block';
+            document.getElementById('progressContainer').style.display = 'none';
+            document.getElementById('resultContainer').style.display = 'none';
+            limparDados();
+        }
+        
+        // Auto-preencher com dados do usuário se disponível
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dados fornecidos pelo usuário
+            const dadosUsuario = `21/jul 	  PLANO 	  R$-   	 CRED 	 LUCAS 250,00 	 	 PG 	 ALISSON 	  R$  - 
+ 01/ago 	  CORTE NAVALHADO 	  R$50,00 	 PIX 	 LUCAS 	 	 PG 	 ALISSON 	  R$  25.00 
+ 01/ago 	  CORTE TESOURA 	  R$45,00 	 CRED 	 HENRIQUE 	 	 PG 	 ALISSON 	  R$  22.50 
+ 01/ago 	  CORTE MAQUINA 	  R$40,00 	 CRED 	 	 	 PG 	 ALISSON 	  R$  20.00 
+ 02/ago 	  CORTE TESOURA 	  R$45,00 	 CRED 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 02/ago 	  CORTE TESOURA 	  R$45,00 	 PIX 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 02/ago 	  CAB.BARBA 	  R$75,00 	 DEB 	 	 	 PG 	 ALISSON 	  R$  37.50 
+ 02/ago 	  CORTE SOMB. 	  R$50,00 	 PIX 	 	 	 PG 	 ALISSON 	  R$  25.00 
+ 04/ago 	  CORT.BARB 	  R$85,00 	 DEB 	 	 	 PG 	 ALISSON 	  R$  42.50 
+ 04/ago 	  BARB 	  R$40,00 	 CRED 	 	 	 PG 	 ALISSON 	  R$  20.00 
+ 04/ago 	  CORT.MAQUINA 	  R$35,00 	 DEB 	 	 	 PG 	 ALISSON 	  R$  17.50 
+ 04/ago 	  CORTE DEGRADE 	  R$45,00 	 DINH 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 04/ago 	  CORTE TESOURA 	  R$45,00 	 DINH 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 05/ago 	  CORTE TESOURA 	  R$45,00 	 PIX 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 05/ago 	  CORTE MAQUINA 	  R$37,00 	 PIX 	 	 	 PG 	 ALISSON 	  R$  18.50 
+ 05/ago 	  COTE TESOURA 	  R$45,00 	 DEB 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 07/ago 	  CORTE MAQUINA 	  R$35,00 	 DINH 	 GRINGO 	 	 PG 	 ALISSON 	  R$  17.50 
+ 07/ago 	  CORTE BARB 	  R$60,00 	 PIX 	 HILTON 	 	 PG 	 ALISSON 	  R$  30.00 
+ 07/ago 	  CORTE DEGRADE 	  R$40,00 	 PIX 	 DILON LEAO 	 929822688 	 PG 	 ALISSON 	  R$  20.00 
+ 07/ago 	  CORTE MAQUINA 	  R$35,00 	 CRED 	 PEDRO 	 	 PG 	 ALISSON 	  R$  17.50 
+ 07/ago 	  CORTE DEGRADE 	  R$40,00 	 DEB 	 FILIPE SILVEIRA 	 4797121073 	 PG 	 ALISSON 	  R$  20.00 
+ 07/ago 	  CORTE MAQUINA 	  R$35,00 	 DEB 	 VINICIOS RIOS 	 48991910866 	 PG 	 ALISSON 	  R$  17.50 
+ 07/ago 	  CABELO E BARBA 	  R$65,00 	 CRED 	 TALES 	 	 PG 	 ALISSON 	  R$  32.50 
+ 07/ago 	  CORTE MILITAR 	  R$35,00 	 DEB 	 JACKSON KAYKE 	 48999169408 	 PG 	 ALISSON 	  R$  17.50 
+ 07/ago 	  CORTE TESOURA 	  R$45,00 	 CRED 	 EVANDRO ZUCATE 	 51991733456 	 PG 	 ALISSON 	  R$  22.50 
+ 08/ago 	  CORTE TESOURA 	  R$45,00 	 PIX 	 MATHEUS ROSA 	 71999085398 	 PG 	 ALISSON 	  R$  22.50 
+ 08/ago 	  CORTE TESOURA 	  R$45,00 	 PIX 	 ENRIQUE 	 	 PG 	 ALISSON 	  R$  22.50 
+ 08/ago 	  CORTE TESOURA 	  R$45,00 	 DEB 	 ECTOR DEUGADO 	 51996159201 	 PG 	 ALISSON 	  R$  22.50 
+ 08/ago 	  CORTE MAQUINA 	  R$145,00 	 DEB 	 ERIC VIEIRA 	 51982960333 	 PLANO 	 ALISSON 	  R$  72.50 
+ 08/ago 	  CORTE E BARBA 	  R$80,00 	 CRED 	 SILNEI MEDINA 	 48999810581 	 PG 	 ALISSON 	  R$  40.00 
+ 09/ago 	  CORTE TESOURA 	  R$45,00 	 DINH 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 09/ago 	  CORTE E BARBA 	  R$85,00 	 PIX 	 SR.IVO 	 	 PG 	 ALISSON 	  R$  42.50 
+ 09/ago 	  CORTE TESOURA 	  R$90,00 	 PIX 	 RONALD PADILHA 	 55991378449 	 PG 	 ALISSON 	  R$  45.00 
+ 09/ago 	  CORTE MILITAR 	  R$30,00 	 PIX 	 	 	 PG 	 ALISSON 	  R$  15.00 
+ 09/ago 	  CORTE MILITAR 	  R$30,00 	 DEB 	 	 	 PG 	 ALISSON 	  R$  15.00 
+ 11/ago 	  CORTE DEGRADE 	  R$40,00 	 PIX 	 CALOS 	 	 PG 	 ALISSON 	  R$  20.00 
+ 11/ago 	  CABELO E BARBA 	  R$85,00 	 DEB 	 CALOS SILVA 	 48988734156 	 PG 	 ALISSON 	  R$  42.50 
+ 11/ago 	  CORTE TESOURA 	  R$45,00 	 DEB 	 PEDRO CARNEIRO 	 48988758865 	 PG 	 ALISSON 	  R$  22.50 
+ 11/ago 	  CABELO E BARBA 	  R$85,00 	 CRED 	 WANDERSON FERNANDO 	 84994399132 	 PG 	 ALISSON 	  R$  42.50 
+ 12/ago 	  CABELO E BARBA 	  R$85,00 	 DINH 	 	 	 PG 	 ALISSON 	  R$  42.50 
+ 12/ago 	  CORTE TESOURA 	  R$45,00 	 PIX 	 MATHEUS ROCHA 	 15991081330 	 PG 	 ALISSON 	  R$  22.50 
+ 13/ago 	  CORTE TESOURA 	  R$45,00 	 DEB 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 13/ago 	  CORTE MAQUINA 	  R$35,00 	 DEB 	 	 	 PG 	 ALISSON 	  R$  17.50 
+ 13/ago 	  CORTE TESOURA 	  R$45,00 	 PIX 	 AGNALDO SILVA 	 48988574675 	 PG 	 ALISSON 	  R$  22.50 
+ 13/ago 	  PEZINHO 	  R$15,00 	 PIX 	 ALEXANDRE 	 	 PG 	 ALISSON 	  R$  7.50 
+ 13/ago 	  CORTE BARB 	  R$-   	 PLANO 	 LUCAS 	 DOIS /QUATRO 	 PG 	 ALISSON 	  R$  - 
+ 13/ago 	  CORTE DEGRADE 	  R$40,00 	 DEB 	 FERNANDO SCHAPPO 	 48996295556 	 PG 	 ALISSON 	  R$  20.00 
+ 14/ago 	  CORTE SELAGEM 	  R$120,00 	 CRED 	 JOELIAS SILVA 	 62992800330 	 PG 	 ALISSON 	  R$  60.00 
+ 14/ago 	  CORTE MILITAR 	  R$30,00 	 DINHEIRO 	 KAIO 	 	 PG 	 ALISSON 	  R$  15.00 
+ 14/ago 	  CORTE MAQUINA 	  R$35,00 	 PIX 	 ALEXANDRE 	 	 PG 	 ALISSON 	  R$  17.50 
+ 14/ago 	  CORTE TESOURA 	  R$45,00 	 CRED 	 ALEX 	 	 PG 	 ALISSON 	  R$  22.50 
+ 15/ago 	  CORTE MAQUINA 	  R$40,00 	 DEB 	 TALEX 	 	 PG 	 ALISSON 	  R$  20.00 
+ 15/ago 	  CCORTE MAQUINA 	  R$30,00 	 PIX 	 VITOR 	 	 PG 	 ALISSON 	  R$  15.00 
+ 15/ago 	  CORTE BARB 	  R$70,00 	 PIX 	 FAGNER 	 48998220338 	 PG 	 ALISSON 	  R$  35.00 
+ 15/ago 	  CORTE TESOURA 	  R$45,00 	 PIX 	 ARTUR 	 	 PG 	 ALISSON 	  R$  22.50 
+ 15/ago 	  CORTE TESOURA 	  R$45,00 	 DEB 	 HENRIQUE 	 	 PG 	 ALISSON 	  R$  22.50 
+ 15/ago 	  CORTE TESOURA 	  R$45,00 	 DINH 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 15/ago 	  CORTE TESOURA 	  R$40,00 	 PIX 	 AUGUSTO 	 	 PG 	 ALISSON 	  R$  20.00 
+ 15/ago 	  CORTE TESOURA 	  R$45,00 	 CRED 	 MURILO 	 	 PG 	 ALISSON 	  R$  22.50 
+ 18/ago 	  CORTE MAQUINA 	  R$35,00 	 PIX 	 	 	 PG 	 ALISSON 	  R$  17.50 
+ 18/ago 	  CORTE TESOURA 	  R$45,00 	 PIX 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 18/ago 	  CORTE MAQUINA 	  R$30,00 	 DEB 	 	 	 PG 	 ALISSON 	  R$  15.00 
+ 18/ago 	  CORTE TESOURA 	  R$45,00 	 CRED 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 19/ago 	  CORTE ACAB 	  R$50,00 	 DEB 	 	 	 PG 	 ALISSON 	  R$  25.00 
+ 20/ago 	  CORTE BARB 	  R$-   	 	 TIAGO CANECA 	 	 PG 	 ALISSON 	  R$  - 
+ 21/ago 	  CORTE MAQUINA 	  R$45,00 	 DEB 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 21/ago 	  CORTER TESOU 	  R$45,00 	 PIX 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 21/ago 	  CORTER TESOU 	  R$45,00 	 DEB 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 21/ago 	  CORTE TESOURA 	  R$-   	 	 PLANO 3 	 	 PG 	 ALISSON 	  R$  - 
+ 22/ago 	  CORTE MILITAR 	  R$30,00 	 PIX 	 	 	 PG 	 ALISSON 	  R$  15.00 
+ 22/ago 	  CORTE MAQUINA 	  R$35,00 	 PIX 	 	 	 PG 	 ALISSON 	  R$  17.50 
+ 22/ago 	  CORTE E BARBA 	  R$75,00 	 CRED 	 	 	 PG 	 ALISSON 	  R$  37.50 
+ 22/ago 	  CORTE TESOURA 	  R$45,00 	 PIX 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 22/ago 	  CORTE TESOURA 	  R$45,00 	 CRED 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 23/ago 	  CORTE  TESOURA 	  R$45,00 	 DEB 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 23/ago 	  CORTE TESOURA 	  R$45,00 	 CRED 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 23/ago 	  CORTE MAQUINA 	  R$35,00 	 PIX 	 	 	 PG 	 ALISSON 	  R$  17.50 
+ 23/ago 	  CORTE MAQUINA 	  R$35,00 	 CRED 	 	 	 PG 	 ALISSON 	  R$  17.50 
+ 25/ago 	  CORTE TESOURA 	  R$45,00 	 DEB 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 25/ago 	  CORTE E BARBA 	  R$85,00 	 PIX 	 	 	 PG 	 ALISSON 	  R$  42.50 
+ 25/ago 	  CORTE TESOURA 	  R$45,00 	 DINH 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 26/ago 	  CORTE DEGRADE 	  R$40,00 	 PIX 	 	 	 PG 	 ALISSON 	  R$  20.00 
+ 26/ago 	  CORTE MILITAR 	  R$30,00 	 DEB 	 	 	 PG 	 ALISSON 	  R$  15.00 
+ 26/ago 	  CORTE TESOURA 	  R$45,00 	 CRED 	 	 	 PG 	 ALISSON 	  R$  22.50 
+ 28/ago 	  CORTE MILITAR 	  R$30,00 	 DEB 	 	 	 PG 	 ALISSON 	  R$  15.00 
+ 28/ago 	  CORTE MAQUINA 	  R$35,00 	 PIX 	 	 	 PG 	 ALISSON 	  R$  17.50 
+ 28/ago 	  CORTE MAQUINA 	  R$35,00 	 DEB 	 	 	 PG 	 ALISSON 	  R$  17.50 
+ 28/ago 	  CORTE TESOURA 	  R$45,00 	 DINH 	 	 	 PG 	 ALISSON 	  R$  22.50`;
+            
+            // Preencher automaticamente
+            document.getElementById('dadosHistoricos').value = dadosUsuario;
+        });
+    </script>
+</body>
+</html>
