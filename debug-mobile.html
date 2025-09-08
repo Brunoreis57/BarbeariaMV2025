@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Mobile - Barbearia MV</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .debug-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .log {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .error { background: #ffe6e6; }
+        .success { background: #e6ffe6; }
+        .warning { background: #fff3cd; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="debug-container">
+        <h2>🔍 Debug Mobile - Barbearia MV</h2>
+        <p><strong>User Agent:</strong> <span id="userAgent"></span></p>
+        <p><strong>Screen Size:</strong> <span id="screenSize"></span></p>
+        <p><strong>Is Mobile:</strong> <span id="isMobile"></span></p>
+    </div>
+
+    <div class="debug-container">
+        <h3>📱 Teste de Login</h3>
+        <input type="text" id="username" placeholder="Usuário (ex: 48933002321)" value="48933002321">
+        <input type="password" id="password" placeholder="Senha (ex: matheus2025)" value="matheus2025">
+        <button onclick="testLogin()">🔐 Testar Login</button>
+        <button onclick="testSupabase()">☁️ Testar Supabase</button>
+        <button onclick="testLocalStorage()">💾 Testar localStorage</button>
+        <button onclick="clearLogs()">🗑️ Limpar Logs</button>
+    </div>
+
+    <div class="debug-container">
+        <h3>📋 Logs de Debug</h3>
+        <div id="logs" class="log"></div>
+    </div>
+
+    <script src="js/supabase-client.js"></script>
+    <script>
+        // Função para adicionar logs
+        function addLog(message, type = 'info') {
+            const logs = document.getElementById('logs');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}\n`;
+            logs.textContent += logEntry;
+            logs.scrollTop = logs.scrollHeight;
+            
+            if (type === 'error') {
+                logs.classList.add('error');
+            } else if (type === 'success') {
+                logs.classList.add('success');
+            } else if (type === 'warning') {
+                logs.classList.add('warning');
+            }
+        }
+
+        // Informações do dispositivo
+        document.getElementById('userAgent').textContent = navigator.userAgent;
+        document.getElementById('screenSize').textContent = `${window.innerWidth}x${window.innerHeight}`;
+        const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        document.getElementById('isMobile').textContent = isMobile ? 'SIM' : 'NÃO';
+
+        addLog('🚀 Debug Mobile iniciado');
+        addLog(`📱 Dispositivo: ${isMobile ? 'Mobile' : 'Desktop'}`);
+        addLog(`📏 Resolução: ${window.innerWidth}x${window.innerHeight}`);
+
+        // Teste de Login Completo
+        async function testLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            addLog(`🔐 Testando login: ${username} / ***`);
+            
+            try {
+                // Testar Supabase primeiro
+                if (window.SupabaseAuth) {
+                    addLog('☁️ Tentando autenticação via Supabase...');
+                    const result = await window.SupabaseAuth.login(username, password);
+                    
+                    if (result.success) {
+                        addLog(`✅ Login Supabase bem-sucedido: ${result.funcionario.nome}`, 'success');
+                        return;
+                    } else {
+                        addLog(`❌ Falha no login Supabase: ${result.error}`, 'error');
+                    }
+                } else {
+                    addLog('⚠️ SupabaseAuth não disponível', 'warning');
+                }
+                
+                // Fallback para localStorage
+                addLog('💾 Tentando autenticação via localStorage...');
+                const employees = JSON.parse(localStorage.getItem('employees') || '[]');
+                addLog(`👥 Funcionários no localStorage: ${employees.length}`);
+                
+                const user = employees.find(emp => 
+                    emp.credentials?.username === username && 
+                    emp.credentials?.password === password &&
+                    emp.credentials?.active === true
+                );
+                
+                if (user) {
+                    addLog(`✅ Login localStorage bem-sucedido: ${user.name}`, 'success');
+                } else {
+                    addLog('❌ Credenciais não encontradas no localStorage', 'error');
+                }
+                
+            } catch (error) {
+                addLog(`💥 Erro durante o login: ${error.message}`, 'error');
+                console.error('Erro no teste de login:', error);
+            }
+        }
+
+        // Teste específico do Supabase
+        async function testSupabase() {
+            addLog('☁️ Testando conexão Supabase...');
+            
+            try {
+                if (typeof window.supabase === 'undefined') {
+                    addLog('❌ Supabase não carregado', 'error');
+                    return;
+                }
+                
+                addLog('✅ Supabase carregado');
+                
+                if (window.SupabaseAuth) {
+                    addLog('✅ SupabaseAuth disponível');
+                    
+                    // Testar função RPC
+                    const { data, error } = await window.supabase.rpc('login_funcionario', {
+                        usuario_input: '48933002321',
+                        senha_input: 'matheus2025'
+                    });
+                    
+                    if (error) {
+                        addLog(`❌ Erro RPC: ${error.message}`, 'error');
+                    } else {
+                        addLog(`✅ RPC funcionando: ${JSON.stringify(data)}`, 'success');
+                    }
+                } else {
+                    addLog('❌ SupabaseAuth não disponível', 'error');
+                }
+                
+            } catch (error) {
+                addLog(`💥 Erro no teste Supabase: ${error.message}`, 'error');
+            }
+        }
+
+        // Teste do localStorage
+        function testLocalStorage() {
+            addLog('💾 Testando localStorage...');
+            
+            try {
+                const employees = JSON.parse(localStorage.getItem('employees') || '[]');
+                addLog(`👥 Funcionários encontrados: ${employees.length}`);
+                
+                employees.forEach((emp, index) => {
+                    addLog(`${index + 1}. ${emp.name} - ${emp.credentials?.username} (${emp.credentials?.active ? 'Ativo' : 'Inativo'})`);
+                });
+                
+                if (employees.length === 0) {
+                    addLog('⚠️ Nenhum funcionário no localStorage', 'warning');
+                }
+                
+            } catch (error) {
+                addLog(`💥 Erro no localStorage: ${error.message}`, 'error');
+            }
+        }
+
+        // Limpar logs
+        function clearLogs() {
+            document.getElementById('logs').textContent = '';
+            document.getElementById('logs').className = 'log';
+        }
+
+        // Interceptar erros JavaScript
+        window.addEventListener('error', function(e) {
+            addLog(`💥 Erro JS: ${e.message} (${e.filename}:${e.lineno})`, 'error');
+        });
+
+        // Interceptar erros de Promise
+        window.addEventListener('unhandledrejection', function(e) {
+            addLog(`💥 Promise rejeitada: ${e.reason}`, 'error');
+        });
+
+        // Auto-teste inicial
+        setTimeout(() => {
+            testSupabase();
+            testLocalStorage();
+        }, 1000);
+    </script>
+</body>
+</html>
